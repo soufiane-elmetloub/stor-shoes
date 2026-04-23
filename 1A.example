@@ -1,0 +1,623 @@
+# 🏗️ StorShoes — خطة تطوير منصة E-Commerce متكاملة (Mobile-First)
+
+## 📌 نظرة عامة على المشروع
+
+بناء متجر إلكتروني متخصص في بيع الأحذية يستهدف مستخدمي **Instagram** بشكل أساسي. المنصة تتضمن:
+- **واجهة المتجر (Storefront)**: تطبيق ويب Mobile-First بتجربة مستخدم سلسة وسريعة
+- **لوحة التحكم الإدارية (Admin Dashboard)**: إدارة شاملة للمنتجات والطلبات والمخزون
+- **الخلفية (Backend API)**: نظام API متكامل وآمن
+
+---
+
+## 🛠️ التوجه التقني المعتمد (Tech Stack)
+
+| الطبقة | التقنية | السبب |
+|--------|---------|-------|
+| **Storefront** | Next.js 14 (App Router) | SEO ممتاز + SSR/SSG + أداء فائق |
+| **Admin Dashboard** | React.js + Vite | سرعة التطوير + HMR سريع |
+| **Styling** | Tailwind CSS v3 | تصميم Modern + Responsive + سرعة التنفيذ |
+| **Backend** | NestJS (Node.js) | هيكلية واضحة + TypeScript + قابل للتوسع |
+| **ORM** | Prisma | Type-safe + Migrations سهلة |
+| **Database** | PostgreSQL | موثوقة + Relations قوية للمنتجات والطلبات |
+| **File Storage** | Cloudinary / AWS S3 | تحسين الصور تلقائياً (WebP) |
+| **Monorepo** | pnpm Workspaces | مشاركة الأنواع والتكوينات بين المشاريع |
+
+---
+
+## 📁 هيكل المشروع (Monorepo Architecture)
+
+```
+StorShoes/
+├── apps/
+│   ├── storefront/          # Next.js 14 - واجهة المتجر
+│   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── (shop)/
+│   │   │   │   │   ├── page.tsx            # الصفحة الرئيسية
+│   │   │   │   │   ├── products/
+│   │   │   │   │   │   ├── page.tsx        # قائمة المنتجات
+│   │   │   │   │   │   └── [slug]/
+│   │   │   │   │   │       └── page.tsx    # صفحة المنتج
+│   │   │   │   │   ├── cart/
+│   │   │   │   │   │   └── page.tsx        # سلة التسوق
+│   │   │   │   │   └── checkout/
+│   │   │   │   │       └── page.tsx        # إتمام الطلب
+│   │   │   │   ├── layout.tsx
+│   │   │   │   └── globals.css
+│   │   │   ├── components/
+│   │   │   │   ├── ui/                     # مكونات أساسية
+│   │   │   │   ├── layout/                 # Header, Footer, Nav
+│   │   │   │   └── sections/              # Hero, Featured, etc.
+│   │   │   ├── features/
+│   │   │   │   ├── cart/                   # منطق السلة
+│   │   │   │   ├── products/              # منطق المنتجات
+│   │   │   │   └── checkout/              # منطق الطلب
+│   │   │   ├── hooks/
+│   │   │   ├── lib/
+│   │   │   ├── services/                  # API clients
+│   │   │   ├── types/
+│   │   │   └── utils/
+│   │   ├── public/
+│   │   ├── next.config.js
+│   │   └── tailwind.config.ts
+│   │
+│   ├── admin/               # React + Vite - لوحة التحكم
+│   │   ├── src/
+│   │   │   ├── pages/
+│   │   │   │   ├── DashboardPage.tsx
+│   │   │   │   ├── ProductsPage.tsx
+│   │   │   │   ├── OrdersPage.tsx
+│   │   │   │   ├── InventoryPage.tsx
+│   │   │   │   └── ReportsPage.tsx
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── services/
+│   │   │   └── types/
+│   │   ├── vite.config.ts
+│   │   └── tailwind.config.ts
+│   │
+│   └── api/                 # NestJS - Backend
+│       ├── src/
+│       │   ├── modules/
+│       │   │   ├── auth/
+│       │   │   │   ├── auth.module.ts
+│       │   │   │   ├── auth.controller.ts
+│       │   │   │   ├── auth.service.ts
+│       │   │   │   └── guards/
+│       │   │   ├── products/
+│       │   │   │   ├── products.module.ts
+│       │   │   │   ├── products.controller.ts
+│       │   │   │   ├── products.service.ts
+│       │   │   │   └── dto/
+│       │   │   ├── orders/
+│       │   │   │   ├── orders.module.ts
+│       │   │   │   ├── orders.controller.ts
+│       │   │   │   ├── orders.service.ts
+│       │   │   │   └── dto/
+│       │   │   ├── inventory/
+│       │   │   ├── customers/
+│       │   │   ├── categories/
+│       │   │   ├── uploads/
+│       │   │   └── reports/
+│       │   ├── common/
+│       │   │   ├── decorators/
+│       │   │   ├── filters/
+│       │   │   ├── interceptors/
+│       │   │   └── pipes/
+│       │   ├── prisma/
+│       │   │   ├── prisma.module.ts
+│       │   │   └── prisma.service.ts
+│       │   └── main.ts
+│       └── prisma/
+│           ├── schema.prisma
+│           ├── seed.ts
+│           └── migrations/
+│
+├── packages/
+│   └── shared/              # أنواع وأدوات مشتركة
+│       ├── types/
+│       │   ├── product.ts
+│       │   ├── order.ts
+│       │   └── customer.ts
+│       └── utils/
+│           ├── format.ts
+│           └── validation.ts
+│
+├── docker-compose.yml
+├── pnpm-workspace.yaml
+├── package.json
+├── .env.example
+└── README.md
+```
+
+---
+
+## 🗄️ تصميم قاعدة البيانات (Database Schema)
+
+```prisma
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== المنتجات ====================
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  nameAr      String?   @map("name_ar")
+  slug        String    @unique
+  description String?
+  image       String?
+  isActive    Boolean   @default(true) @map("is_active")
+  products    Product[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("categories")
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  name        String
+  nameAr      String?          @map("name_ar")
+  slug        String           @unique
+  description String?
+  brand       String?
+  price       Decimal          @db.Decimal(10, 2)
+  salePrice   Decimal?         @map("sale_price") @db.Decimal(10, 2)
+  categoryId  String           @map("category_id")
+  category    Category         @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  variants    ProductVariant[]
+  tags        String[]         @default([])
+  isActive    Boolean          @default(true) @map("is_active")
+  isFeatured  Boolean          @default(false) @map("is_featured")
+  viewCount   Int              @default(0) @map("view_count")
+  orderItems  OrderItem[]
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@index([categoryId])
+  @@index([slug])
+  @@index([isActive, isFeatured])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String
+  alt       String?
+  order     Int     @default(0)
+  productId String  @map("product_id")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model ProductVariant {
+  id        String      @id @default(cuid())
+  productId String      @map("product_id")
+  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size      String      // المقاس: "40", "41", "42"...
+  color     String?     // اللون
+  colorHex  String?     @map("color_hex")
+  sku       String      @unique
+  stock     Int         @default(0)
+  isActive  Boolean     @default(true) @map("is_active")
+  orderItems OrderItem[]
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  @@unique([productId, size, color])
+  @@index([productId])
+  @@map("product_variants")
+}
+
+// ==================== العملاء ====================
+
+model Customer {
+  id        String   @id @default(cuid())
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  phone     String   @unique
+  email     String?  @unique
+  city      String?
+  address   String?
+  instagram String?  // حساب Instagram
+  orders    Order[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("customers")
+}
+
+// ==================== الطلبات ====================
+
+model Order {
+  id             String      @id @default(cuid())
+  orderNumber    String      @unique @map("order_number")
+  customerId     String      @map("customer_id")
+  customer       Customer    @relation(fields: [customerId], references: [id])
+  items          OrderItem[]
+  subtotal       Decimal     @db.Decimal(10, 2)
+  shippingCost   Decimal     @default(0) @map("shipping_cost") @db.Decimal(10, 2)
+  total          Decimal     @db.Decimal(10, 2)
+  status         OrderStatus @default(PENDING)
+  shippingCity   String?     @map("shipping_city")
+  shippingAddress String?    @map("shipping_address")
+  notes          String?
+  source         OrderSource @default(WEBSITE)
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String         @id @default(cuid())
+  orderId   String         @map("order_id")
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String         @map("product_id")
+  product   Product        @relation(fields: [productId], references: [id])
+  variantId String         @map("variant_id")
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  quantity  Int
+  price     Decimal        @db.Decimal(10, 2)
+
+  @@map("order_items")
+}
+
+enum OrderStatus {
+  PENDING       // قيد المراجعة
+  CONFIRMED     // تم التأكيد
+  PROCESSING    // قيد التجهيز
+  SHIPPED       // تم الشحن
+  DELIVERED     // تم التوصيل
+  CANCELLED     // ملغي
+  RETURNED      // مرتجع
+}
+
+enum OrderSource {
+  WEBSITE       // من الموقع مباشرة
+  INSTAGRAM     // من Instagram
+  MANUAL        // إدخال يدوي
+}
+
+// ==================== الإدارة ====================
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      AdminRole @default(ADMIN)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
+```
+
+---
+
+## 🔌 هندسة الـ API (API Architecture)
+
+### المسارات الرئيسية (API Routes)
+
+| المجموعة | المسار | الوصف |
+|-----------|--------|-------|
+| **Auth** | `POST /api/auth/login` | تسجيل دخول الإدارة |
+| **Auth** | `POST /api/auth/refresh` | تجديد الـ Token |
+| **Products** | `GET /api/products` | قائمة المنتجات (مع Pagination + Filter) |
+| **Products** | `GET /api/products/:slug` | تفاصيل منتج |
+| **Products** | `POST /api/products` | إضافة منتج (Admin) |
+| **Products** | `PATCH /api/products/:id` | تعديل منتج (Admin) |
+| **Products** | `DELETE /api/products/:id` | حذف منتج (Admin) |
+| **Categories** | `GET /api/categories` | قائمة التصنيفات |
+| **Categories** | `POST /api/categories` | إضافة تصنيف (Admin) |
+| **Orders** | `POST /api/orders` | إنشاء طلب جديد |
+| **Orders** | `GET /api/orders` | قائمة الطلبات (Admin) |
+| **Orders** | `PATCH /api/orders/:id/status` | تحديث حالة الطلب (Admin) |
+| **Inventory** | `GET /api/inventory` | حالة المخزون (Admin) |
+| **Inventory** | `PATCH /api/inventory/:variantId` | تحديث المخزون (Admin) |
+| **Reports** | `GET /api/reports/sales` | تقرير المبيعات (Admin) |
+| **Reports** | `GET /api/reports/overview` | إحصائيات عامة (Admin) |
+| **Uploads** | `POST /api/uploads/image` | رفع صورة (Admin) |
+
+---
+
+## 🗺️ خريطة الطريق التفصيلية (Technical Roadmap)
+
+### المرحلة 1: التأسيس والبنية التحتية ⚙️
+
+#### المهام:
+- [ ] إعداد الـ Monorepo (pnpm workspaces)
+- [ ] تهيئة Next.js 14 (Storefront) مع App Router
+- [ ] تهيئة React + Vite (Admin Dashboard)
+- [ ] تهيئة NestJS (Backend API)
+- [ ] إعداد Prisma مع PostgreSQL
+- [ ] تصميم وتنفيذ Database Schema
+- [ ] إعداد Docker Compose (PostgreSQL + API)
+- [ ] تكوين Tailwind CSS لكلا التطبيقين
+- [ ] إعداد الحزمة المشتركة (shared types)
+- [ ] نظام المصادقة (JWT) للإدارة
+- [ ] إعداد ESLint + Prettier + Husky
+- [ ] كتابة ملف README مع تعليمات التشغيل
+
+#### المخرجات:
+- بيئة تطويرية كاملة تعمل محلياً
+- قاعدة بيانات مع بيانات تجريبية (Seed)
+- نظام مصادقة يعمل
+
+---
+
+### المرحلة 2: واجهة المتجر (Storefront) 🛍️
+
+#### المهام:
+
+##### الصفحة الرئيسية (Landing Page):
+- [ ] **Hero Section**: تصميم جذاب مع صور أحذية عالية الجودة + CTA
+- [ ] قسم "المنتجات المميزة" (Featured Products) — Carousel/Grid
+- [ ] قسم "التصنيفات" — عرض بصري للأقسام
+- [ ] قسم "لماذا نحن؟" — مميزات المتجر
+- [ ] قسم Instagram Feed (ربط بالحساب)
+- [ ] Footer مع روابط ومعلومات التواصل
+
+##### صفحة المنتجات:
+- [ ] شبكة منتجات متجاوبة (Responsive Grid)
+- [ ] نظام تصفية (Filters): حسب التصنيف، المقاس، اللون، السعر
+- [ ] نظام Pagination أو Infinite Scroll
+- [ ] بحث فوري (Search)
+- [ ] عرض حالة "نفذ من المخزون"
+
+##### صفحة المنتج الواحد:
+- [ ] عرض صور المنتج (Image Gallery/Slider)
+- [ ] اختيار المقاس واللون
+- [ ] عرض التوفر بناءً على المقاس المختار
+- [ ] زر إضافة للسلة مع Animation
+- [ ] منتجات مشابهة (Related Products)
+
+##### سلة التسوق (Cart):
+- [ ] إدارة السلة (إضافة، تعديل الكمية، حذف)
+- [ ] حفظ السلة في localStorage
+- [ ] عرض المجموع الكلي
+- [ ] زر المتابعة للدفع
+
+##### إتمام الطلب (Checkout):
+- [ ] نموذج بيانات العميل (الاسم، الهاتف، العنوان)
+- [ ] ملخص الطلب قبل التأكيد
+- [ ] تأكيد الطلب مع رقم متابعة
+- [ ] صفحة شكر ورقم الطلب
+
+##### التحسينات:
+- [ ] صور WebP مع Lazy Loading
+- [ ] تحسين SEO (Meta tags, Open Graph)
+- [ ] تحسين Core Web Vitals (LCP, FID, CLS)
+- [ ] أنيميشن سلس (Framer Motion)
+- [ ] دعم اللغة العربية (RTL)
+
+---
+
+### المرحلة 3: لوحة التحكم الإدارية (Admin Dashboard) 📊
+
+#### المهام:
+
+##### الصفحة الرئيسية (Dashboard):
+- [ ] بطاقات الإحصائيات (إجمالي الطلبات، الإيرادات، المنتجات، العملاء)
+- [ ] رسم بياني للمبيعات (آخر 30 يوم)
+- [ ] آخر الطلبات الواردة
+- [ ] تنبيهات المخزون المنخفض
+
+##### إدارة المنتجات:
+- [ ] جدول المنتجات مع بحث وتصفية
+- [ ] نموذج إضافة/تعديل منتج (مع رفع صور متعددة)
+- [ ] إدارة المتغيرات (المقاسات والألوان) لكل منتج
+- [ ] تفعيل/إلغاء تفعيل المنتج
+- [ ] حذف منتج (Soft Delete)
+
+##### إدارة الطلبات:
+- [ ] جدول الطلبات مع فلاتر حسب الحالة والتاريخ
+- [ ] عرض تفاصيل الطلب
+- [ ] تغيير حالة الطلب (مع إشعارات)
+- [ ] طباعة فاتورة/إيصال
+
+##### إدارة المخزون:
+- [ ] عرض شامل لحالة المخزون لكل مقاس
+- [ ] تحديث الكميات بسهولة
+- [ ] تنبيهات المخزون المنخفض (تلقائية)
+- [ ] تقرير حركة المخزون
+
+##### التقارير:
+- [ ] تقرير المبيعات اليومية/الأسبوعية/الشهرية
+- [ ] أكثر المنتجات مبيعاً
+- [ ] إحصائيات العملاء
+- [ ] تصدير التقارير (CSV/PDF)
+
+##### التصنيفات:
+- [ ] إضافة/تعديل/حذف التصنيفات
+- [ ] ربط المنتجات بالتصنيفات
+
+##### الإعدادات:
+- [ ] إعدادات المتجر (الاسم، الشعار، معلومات التواصل)
+- [ ] إدارة المشرفين
+- [ ] إعدادات الشحن
+
+---
+
+### المرحلة 4: الاختبار والنشر 🚀
+
+#### المهام:
+- [ ] اختبارات الأداء (Lighthouse Score ≥ 90)
+- [ ] اختبار التوافق مع الشاشات المختلفة
+- [ ] اختبار الأمان (SQL Injection, XSS, CSRF)
+- [ ] إعداد CI/CD Pipeline (GitHub Actions)
+- [ ] إعداد بيئة Production (VPS / Vercel + Railway)
+- [ ] ربط الدومين الرسمي + SSL
+- [ ] إعداد النسخ الاحتياطية التلقائية
+- [ ] مراقبة الأداء (Monitoring)
+
+---
+
+## 📋 معايير الجودة (Definition of Done)
+
+| المعيار | الهدف |
+|---------|-------|
+| **Response Time** | ≤ 2 ثانية لتحميل أي صفحة |
+| **Lighthouse Performance** | ≥ 90/100 |
+| **Lighthouse SEO** | ≥ 95/100 |
+| **Mobile Responsiveness** | متوافق 100% مع جميع أحجام الشاشات |
+| **Code Quality** | ESLint + Prettier بدون أخطاء |
+| **Type Safety** | TypeScript strict mode |
+| **Documentation** | README + API Docs (Swagger) |
+| **Security** | JWT + Rate Limiting + Input Validation |
+
+---
+
+## مراجعة المستخدم المطلوبة
+
+> [!IMPORTANT]
+> **اختيار خدمة الاستضافة**: هل تفضل Vercel (للـ Storefront) + Railway/Render (للـ Backend + DB)؟ أم VPS مخصص (مثل DigitalOcean)?
+
+> [!IMPORTANT]
+> **نظام الدفع**: هل تحتاج تكامل مع بوابة دفع إلكترونية (مثل Stripe أو CashPlus)؟ أم سيكون الدفع عند الاستلام فقط (COD)؟
+
+> [!IMPORTANT]
+> **نظام الإشعارات**: هل تحتاج إشعارات WhatsApp/SMS عند تغيير حالة الطلب؟
+
+> [!WARNING]
+> **الهوية البصرية**: هل لديكم تصميم UI/UX جاهز (Figma)؟ أم سيتم التصميم من الصفر بناءً على هوية المتجر؟
+
+---
+
+## خطة التحقق (Verification Plan)
+
+### الاختبارات الآلية
+- `npm run lint` — التحقق من جودة الكود
+- `npm run test` — اختبارات الوحدات والتكامل
+- `npx lighthouse` — اختبار الأداء
+- اختبارات API عبر Postman/Thunder Client
+
+### التحقق اليدوي
+- اختبار تدفق الشراء الكامل (من التصفح إلى تأكيد الطلب)
+- اختبار الواجهة على أجهزة مختلفة (iPhone, Samsung, etc.)
+- اختبار لوحة التحكم مع بيانات حقيقية
+- مراجعة الأداء على شبكات بطيئة (3G simulation)
+
+---
+
+---
+
+# 📊 ملخص الجداول الزمنية
+
+---
+
+## 📅 الملخص الأول: الجدول الزمني التفصيلي الواقعي
+
+> هذا الجدول يعكس المدة الفعلية المطلوبة لبناء المنصة بجودة عالية مع فريق من **2-3 مطورين**.
+
+| المرحلة | المدة | الأسابيع | التفاصيل |
+|---------|-------|----------|----------|
+| **المرحلة 1**: التأسيس | 3-4 أسابيع | الأسبوع 1-4 | إعداد Monorepo + Database Schema + Auth + Docker + CI/CD أساسي |
+| **المرحلة 2**: واجهة المتجر | 5-6 أسابيع | الأسبوع 5-10 | Landing Page + صفحات المنتجات + Cart + Checkout + SEO + تحسين الأداء |
+| **المرحلة 3**: لوحة التحكم | 5-6 أسابيع | الأسبوع 11-16 | Dashboard + CRUD منتجات + طلبات + مخزون + تقارير |
+| **المرحلة 4**: الاختبار والنشر | 2-3 أسابيع | الأسبوع 17-19 | اختبارات شاملة + تحسين الأداء + النشر + ربط الدومين |
+| **احتياطي** | 1 أسبوع | الأسبوع 20 | إصلاح أخطاء + تعديلات أخيرة |
+
+### 🕐 **المدة الإجمالية: 16 - 20 أسبوعًا (4 - 5 أشهر)**
+
+#### لماذا هذه المدة؟
+- **التأسيس (3-4 أسابيع)**: إعداد بنية Monorepo صحيحة مع NestJS + Prisma + Auth يتطلب وقتاً كافياً لضمان أساس متين. أي تسرع هنا يؤدي لمشاكل لاحقة.
+- **المتجر (5-6 أسابيع)**: تصميم Mobile-First جذاب مع Animations + تحسين الصور + SEO + نظام Cart/Checkout كامل يحتاج وقت تطوير واختبار.
+- **لوحة التحكم (5-6 أسابيع)**: CRUD كامل مع رفع صور + إدارة متغيرات (مقاسات/ألوان) + نظام طلبات + تقارير بيانية — كل واحدة منها ميزة مستقلة.
+- **الاختبار (2-3 أسابيع)**: اختبار التوافق + الأمان + الأداء + النشر يحتاج وقت لا يقل عن أسبوعين.
+
+#### من يحتاج هذا الجدول؟
+- المشاريع التي تريد **جودة عالية من البداية**
+- الفرق التي تعمل **بدوام جزئي** أو لديها التزامات أخرى
+- المشاريع التي تحتاج **توثيق كامل** وتسليم احترافي
+
+---
+
+## 📅 الملخص الثاني: الجدول الزمني المقترح (المُحسَّن)
+
+> هذا الجدول يعكس رؤيتي الشخصية لتنفيذ المشروع بكفاءة أعلى مع فريق من **2-3 مطورين متفرغين**.
+
+| المرحلة | المدة | الأسابيع | التحسينات |
+|---------|-------|----------|-----------|
+| **المرحلة 1**: التأسيس | 2 أسابيع | الأسبوع 1-2 | استخدام templates جاهزة + Prisma seed سريع |
+| **المرحلة 2+3**: المتجر + لوحة التحكم **بالتوازي** | 6 أسابيع | الأسبوع 3-8 | فريق مقسم: مطور للـ Storefront + مطور للـ Admin + مطور للـ Backend |
+| **المرحلة 4**: الاختبار + MVP Launch | 2 أسابيع | الأسبوع 9-10 | نشر MVP أولاً ثم التحسين |
+| **تحسينات وتعديلات** | 2 أسابيع | الأسبوع 11-12 | بناءً على feedback حقيقي |
+
+### 🕐 **المدة الإجمالية: 10 - 12 أسبوعًا (2.5 - 3 أشهر)**
+
+#### لماذا هذا الجدول أفضل؟
+
+##### 1. 🔀 التطوير المتوازي (Parallel Development)
+بدلاً من تطوير المتجر ثم لوحة التحكم بالتتابع، يتم تقسيم الفريق:
+- **مطور Frontend 1**: يطوّر Storefront (Next.js)
+- **مطور Frontend 2**: يطوّر Admin Dashboard (React)
+- **مطور Backend**: يطوّر الـ API ويدعم كلا الفريقين
+
+هذا يوفر **4-5 أسابيع** على الأقل.
+
+##### 2. 🚀 نهج MVP أولاً (Minimum Viable Product)
+بدلاً من بناء كل شيء دفعة واحدة:
+- **الأسابيع 3-6**: بناء **النسخة الأساسية** (عرض المنتجات + طلب + إدارة أساسية)
+- **الأسابيع 7-8**: إضافة **الميزات المتقدمة** (تقارير، فلاتر، animations)
+- **الأسابيع 9-10**: اختبار ونشر
+- **الأسابيع 11-12**: تحسينات بناءً على تجربة المستخدم الحقيقية
+
+##### 3. 📦 استخدام أدوات تسريع
+- **shadcn/ui** أو **Radix UI**: مكونات جاهزة عالية الجودة بدلاً من البناء من الصفر
+- **TanStack Table**: لجداول لوحة التحكم
+- **React Hook Form + Zod**: للنماذج والتحقق
+- **Recharts**: للرسوم البيانية في التقارير
+- **next-intl**: للترجمة والـ RTL
+
+##### 4. 💡 البدء بالأهم (Priority-Based)
+| الأولوية | الميزة | السبب |
+|----------|--------|-------|
+| 🔴 عالية | عرض المنتجات + صفحة المنتج | الوظيفة الأساسية |
+| 🔴 عالية | نظام الطلب (Cart + Checkout) | يولّد المبيعات |
+| 🔴 عالية | إدارة المنتجات (CRUD) | يحتاجها المدير فوراً |
+| 🟡 متوسطة | إدارة الطلبات وتتبعها | مهم لكن يمكن أن يكون يدوياّ مبدئياً |
+| 🟡 متوسطة | فلاتر وبحث متقدم | تحسين التجربة |
+| 🟢 منخفضة | تقارير وإحصائيات | يمكن إضافتها لاحقاً |
+| 🟢 منخفضة | تصدير PDF/CSV | كمالية |
+
+---
+
+## 📊 مقارنة بين الجدولين
+
+| المعيار | الجدول التفصيلي | الجدول المقترح |
+|---------|-----------------|----------------|
+| **المدة** | 16-20 أسبوع | 10-12 أسبوع |
+| **حجم الفريق** | 2-3 مطورين | 3 مطورين متفرغين |
+| **نهج التطوير** | تتابعي (Sequential) | متوازي (Parallel) |
+| **أول إطلاق** | بعد 16 أسبوع | بعد 8 أسابيع (MVP) |
+| **الجودة الأولية** | عالية جداً | جيدة (تتحسن بالتكرار) |
+| **المخاطرة** | منخفضة | متوسطة |
+| **التكلفة** | أعلى (وقت أطول) | أقل (وقت أقصر) |
+| **المرونة** | منخفضة (كل شيء مخطط مسبقاً) | عالية (يتكيف مع الـ feedback) |
+
+> [!TIP]
+> **التوصية**: ابدأ بالجدول المقترح (10-12 أسبوع) مع نهج MVP. أطلق نسخة أولية بعد 8 أسابيع واجمع feedback حقيقي من المستخدمين. هذا يضمن أنك تبني ما يحتاجه العميل فعلاً وليس ما تتخيله.
+
+> [!IMPORTANT]
+> **ملاحظة مهمة**: الجدول المقترح (10-12 أسبوع) يتطلب **3 مطورين متفرغين** على الأقل. إذا كان الفريق أصغر أو يعمل بدوام جزئي، فالجدول التفصيلي (16-20 أسبوع) هو الأنسب.

@@ -1,0 +1,24 @@
+{
+  "name": "storshoes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "StorShoes - E-commerce platform for shoes (Mobile-First)",
+  "scripts": {
+    "dev:storefront": "pnpm --filter storefront dev",
+    "dev:admin": "pnpm --filter admin dev",
+    "dev:api": "pnpm --filter api start:dev",
+    "dev": "pnpm run --parallel dev:storefront dev:admin dev:api",
+    "build:storefront": "pnpm --filter storefront build",
+    "build:admin": "pnpm --filter admin build",
+    "build:api": "pnpm --filter api build",
+    "build": "pnpm run --parallel build:storefront build:admin build:api",
+    "lint": "pnpm run -r lint",
+    "db:migrate": "pnpm --filter api prisma:migrate",
+    "db:seed": "pnpm --filter api prisma:seed",
+    "db:studio": "pnpm --filter api prisma:studio"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

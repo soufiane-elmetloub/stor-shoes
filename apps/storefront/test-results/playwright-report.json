@@ -1,0 +1,505 @@
+{
+  "config": {
+    "configFile": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\playwright.config.ts",
+    "rootDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "smoke-chromium",
+        "name": "smoke-chromium",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "critical-chromium",
+        "name": "critical-chromium",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "a11y-chromium",
+        "name": "a11y-chromium",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "performance-chromium",
+        "name": "performance-chromium",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chaos-chromium",
+        "name": "chaos-chromium",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "regression-chromium",
+        "name": "regression-chromium",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "visual-chromium",
+        "name": "visual-chromium",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "visual-firefox",
+        "name": "visual-firefox",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "visual-webkit",
+        "name": "visual-webkit",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "visual-mobile-chrome",
+        "name": "visual-mobile-chrome",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      },
+      {
+        "outputDir": "C:/xampp/htdocs/StorShoes/apps/storefront/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "visual-mobile-webkit",
+        "name": "visual-mobile-webkit",
+        "testDir": "C:/xampp/htdocs/StorShoes/apps/storefront/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/playwright-report.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/junit.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.1",
+    "workers": 2,
+    "webServer": {
+      "command": "npm run dev -- --hostname 127.0.0.1 --port 3000",
+      "url": "http://127.0.0.1:3000",
+      "cwd": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "critical\\checkout.critical.spec.ts",
+      "file": "critical/checkout.critical.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "guest cart checkout preserves totals and submits order payload @critical @journey",
+          "ok": false,
+          "tags": [
+            "critical",
+            "journey"
+          ],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "critical-chromium",
+              "projectName": "critical-chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 25,
+                  "error": {
+                    "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+                    "stack": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                  },
+                  "errors": [
+                    {
+                      "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-20T20:37:32.624Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium\\error-context.md"
+                    }
+                  ]
+                },
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 18,
+                  "error": {
+                    "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+                    "stack": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                  },
+                  "errors": [
+                    {
+                      "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2026-04-20T20:37:49.010Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium-retry1\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium-retry1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2bdf38e7df084658a49a-759d8444ea3aaeabed72",
+          "file": "critical/checkout.critical.spec.ts",
+          "line": 26,
+          "column": 5
+        },
+        {
+          "title": "quick checkout keeps the selected variant in the order summary @critical",
+          "ok": false,
+          "tags": [
+            "critical"
+          ],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "critical-chromium",
+              "projectName": "critical-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "failed",
+                  "duration": 20,
+                  "error": {
+                    "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+                    "stack": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                  },
+                  "errors": [
+                    {
+                      "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-20T20:37:33.375Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium\\error-context.md"
+                    }
+                  ]
+                },
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 1,
+                  "status": "failed",
+                  "duration": 28,
+                  "error": {
+                    "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+                    "stack": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                  },
+                  "errors": [
+                    {
+                      "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2026-04-20T20:37:50.479Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium-retry1\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium-retry1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2bdf38e7df084658a49a-ebd8855e5ee2f6a7fda6",
+          "file": "critical/checkout.critical.spec.ts",
+          "line": 76,
+          "column": 5
+        },
+        {
+          "title": "order failure recovers safely on retry without losing the checkout state @critical",
+          "ok": false,
+          "tags": [
+            "critical"
+          ],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "critical-chromium",
+              "projectName": "critical-chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22,
+                  "error": {
+                    "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+                    "stack": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                  },
+                  "errors": [
+                    {
+                      "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-04-20T20:38:07.584Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium\\error-context.md"
+                    }
+                  ]
+                },
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14,
+                  "error": {
+                    "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝",
+                    "stack": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                  },
+                  "errors": [
+                    {
+                      "message": "Error: browserType.launch: Executable doesn't exist at C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\node_modules\\playwright-core\\.local-browsers\\chromium_headless_shell-1217\\chrome-headless-shell-win64\\chrome-headless-shell.exe\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     npx playwright install                                 ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 1,
+                  "startTime": "2026-04-20T20:38:14.167Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium-retry1\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\xampp\\htdocs\\StorShoes\\apps\\storefront\\test-results\\artifacts\\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium-retry1\\trace.zip"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2bdf38e7df084658a49a-acc523acfca16028b8fa",
+          "file": "critical/checkout.critical.spec.ts",
+          "line": 109,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-04-20T20:36:49.171Z",
+    "duration": 86171.78199999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

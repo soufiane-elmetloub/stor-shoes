@@ -1,0 +1,151 @@
+<testsuites id="" name="" tests="3" failures="0" skipped="0" errors="3" time="86.171782">
+<testsuite name="critical\checkout.critical.spec.ts" timestamp="2026-04-20T20:37:22.998Z" hostname="critical-chromium" tests="3" failures="0" skipped="0" time="0.127" errors="3">
+<testcase name="guest cart checkout preserves totals and submits order payload @critical @journey" classname="critical\checkout.critical.spec.ts" time="0.043">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium\error-context.md]]
+
+[[ATTACHMENT|artifacts\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|artifacts\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium-retry1\trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Executable doesn&apos;t exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe" type="Error">
+<![CDATA[  [critical-chromium] › critical\checkout.critical.spec.ts:26:5 › guest cart checkout preserves totals and submits order payload @critical @journey 
+
+    Error: browserType.launch: Executable doesn't exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\test-results\artifacts\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\test-results\artifacts\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium-retry1\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\artifacts\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\artifacts\critical-checkout.critical-3649a-er-payload-critical-journey-critical-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="quick checkout keeps the selected variant in the order summary @critical" classname="critical\checkout.critical.spec.ts" time="0.048">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium\error-context.md]]
+
+[[ATTACHMENT|artifacts\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|artifacts\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium-retry1\trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Executable doesn&apos;t exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe" type="Error">
+<![CDATA[  [critical-chromium] › critical\checkout.critical.spec.ts:76:5 › quick checkout keeps the selected variant in the order summary @critical 
+
+    Error: browserType.launch: Executable doesn't exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\test-results\artifacts\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\test-results\artifacts\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium-retry1\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\artifacts\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\artifacts\critical-checkout.critical-9d3e6--the-order-summary-critical-critical-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="order failure recovers safely on retry without losing the checkout state @critical" classname="critical\checkout.critical.spec.ts" time="0.036">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|artifacts\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium\error-context.md]]
+
+[[ATTACHMENT|artifacts\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|artifacts\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium-retry1\trace.zip]]
+]]>
+</system-out>
+<error message="browserType.launch: Executable doesn&apos;t exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe" type="Error">
+<![CDATA[  [critical-chromium] › critical\checkout.critical.spec.ts:109:5 › order failure recovers safely on retry without losing the checkout state @critical 
+
+    Error: browserType.launch: Executable doesn't exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\test-results\artifacts\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at C:\xampp\htdocs\StorShoes\apps\storefront\node_modules\playwright-core\.local-browsers\chromium_headless_shell-1217\chrome-headless-shell-win64\chrome-headless-shell.exe
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: ..\test-results\artifacts\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium-retry1\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\test-results\artifacts\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\test-results\artifacts\critical-checkout.critical-8bba3-the-checkout-state-critical-critical-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>

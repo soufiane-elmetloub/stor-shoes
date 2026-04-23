@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-04-20T20:36:45.249Z",
+  "playwright": {
+    "total": 3,
+    "passed": 0,
+    "failed": 3,
+    "flaky": 0,
+    "skipped": 0,
+    "durationMs": 88849,
+    "failures": [
+      {
+        "title": "guest cart checkout preserves totals and submits order payload @critical @journey",
+        "project": "critical-chromium",
+        "location": "critical/checkout.critical.spec.ts",
+        "durationMs": 36
+      },
+      {
+        "title": "quick checkout keeps the selected variant in the order summary @critical",
+        "project": "critical-chromium",
+        "location": "critical/checkout.critical.spec.ts",
+        "durationMs": 37
+      },
+      {
+        "title": "order failure recovers safely on retry without losing the checkout state @critical",
+        "project": "critical-chromium",
+        "location": "critical/checkout.critical.spec.ts",
+        "durationMs": 32
+      }
+    ],
+    "risks": [
+      {
+        "level": "high",
+        "source": "critical-chromium :: guest cart checkout preserves totals and submits order payload @critical @journey"
+      },
+      {
+        "level": "high",
+        "source": "critical-chromium :: quick checkout keeps the selected variant in the order summary @critical"
+      },
+      {
+        "level": "high",
+        "source": "critical-chromium :: order failure recovers safely on retry without losing the checkout state @critical"
+      }
+    ]
+  },
+  "healingTop10": [],
+  "lighthouse": null
+}

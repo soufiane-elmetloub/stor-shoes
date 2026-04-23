@@ -1,0 +1,38 @@
+{
+  "name": "StorShoes - Premium Footwear Store",
+  "short_name": "StorShoes",
+  "description": "Discover the latest collection of sneakers, formal shoes, and boots. Premium quality, competitive prices, fast delivery across Morocco.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/logoe1.jpeg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["shopping", "fashion", "lifestyle"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "All Products",
+      "short_name": "Products",
+      "description": "Browse all products",
+      "url": "/products",
+      "icons": [{ "src": "/logoe1.jpeg", "sizes": "any", "type": "image/jpeg" }]
+    },
+    {
+      "name": "Contact Us",
+      "short_name": "Contact",
+      "description": "Get in touch",
+      "url": "/contact",
+      "icons": [{ "src": "/logoe1.jpeg", "sizes": "any", "type": "image/jpeg" }]
+    }
+  ]
+}

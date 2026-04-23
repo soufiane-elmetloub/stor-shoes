@@ -1,0 +1,262 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== التصنيفات ====================
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  nameAr      String?   @map("name_ar")
+  slug        String    @unique
+  description String?
+  image       String?
+  isActive    Boolean   @default(true) @map("is_active")
+  products    Product[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("categories")
+}
+
+// ==================== المنتجات ====================
+
+model Product {
+  id          String           @id @default(cuid())
+  name        String
+  nameAr      String?          @map("name_ar")
+  slug        String           @unique
+  description String?
+  brand       String?
+  price       Decimal          @db.Decimal(10, 2)
+  salePrice   Decimal?         @map("sale_price") @db.Decimal(10, 2)
+  categoryId  String           @map("category_id")
+  category    Category         @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  variants    ProductVariant[]
+  tags        String[]         @default([])
+  isActive    Boolean          @default(true) @map("is_active")
+  isFeatured  Boolean          @default(false) @map("is_featured")
+  viewCount   Int              @default(0) @map("view_count")
+  orderItems  OrderItem[]
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  Visit       Visit[]
+
+  @@index([categoryId])
+  @@index([slug])
+  @@index([isActive, isFeatured])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String
+  alt       String?
+  order     Int     @default(0)
+  productId String  @map("product_id")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model ProductVariant {
+  id         String      @id @default(cuid())
+  productId  String      @map("product_id")
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size       String
+  color      String?
+  colorHex   String?     @map("color_hex")
+  sku        String      @unique
+  stock      Int         @default(0)
+  isActive   Boolean     @default(true) @map("is_active")
+  orderItems OrderItem[]
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  @@unique([productId, size, color])
+  @@index([productId])
+  @@map("product_variants")
+}
+
+// ==================== العملاء ====================
+
+model Customer {
+  id        String   @id @default(cuid())
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  phone     String   @unique
+  email     String?  @unique
+  city      String?
+  address   String?
+  instagram String?
+  orders    Order[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("customers")
+}
+
+// ==================== الطلبات ====================
+
+model Order {
+  id              String       @id @default(cuid())
+  orderNumber     String       @unique @map("order_number")
+  customerId      String       @map("customer_id")
+  customer        Customer     @relation(fields: [customerId], references: [id])
+  customerFirstName String?    @map("customer_first_name")
+  customerLastName  String?    @map("customer_last_name")
+  customerPhone     String?    @map("customer_phone")
+  customerCity      String?    @map("customer_city")
+  customerAddress   String?    @map("customer_address")
+  items           OrderItem[]
+  subtotal        Decimal      @db.Decimal(10, 2)
+  shippingCost    Decimal      @default(0) @map("shipping_cost") @db.Decimal(10, 2)
+  total           Decimal      @db.Decimal(10, 2)
+  status          OrderStatus  @default(PENDING)
+  shippingCity    String?      @map("shipping_city")
+  shippingAddress String?      @map("shipping_address")
+  notes           String?
+  source          OrderSource  @default(WEBSITE)
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+  Conversion      Conversion[]
+
+  @@index([customerId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String         @id @default(cuid())
+  orderId   String         @map("order_id")
+  order     Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String         @map("product_id")
+  product   Product        @relation(fields: [productId], references: [id])
+  variantId String         @map("variant_id")
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  quantity  Int
+  price     Decimal        @db.Decimal(10, 2)
+
+  @@map("order_items")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+enum OrderSource {
+  WEBSITE
+  INSTAGRAM
+  MANUAL
+}
+
+// ==================== الإدارة ====================
+
+model Admin {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  name      String
+  role      AdminRole @default(ADMIN)
+  isActive  Boolean   @default(true) @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
+// ==================== رسائل العملاء ====================
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String        @default("رسالة من الموقع")
+  message   String
+  status    ContactStatus @default(NEW)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@map("contact_messages")
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+// ==================== التحليلات والزيارات ====================
+
+model Visit {
+  id            String       @id @default(cuid())
+  ip            String?
+  userAgent     String?      @map("user_agent")
+  country       String?
+  city          String?
+  referrer      String?
+  utmSource     String?      @map("utm_source")
+  utmMedium     String?      @map("utm_medium")
+  utmCampaign   String?      @map("utm_campaign")
+  page          String       @default("/")
+  productId     String?      @map("product_id")
+  product       Product?     @relation(fields: [productId], references: [id])
+  sessionId     String?      @map("session_id")
+  createdAt     DateTime     @default(now()) @map("created_at")
+  UTMTracking   UTMTracking? @relation(fields: [uTMTrackingId], references: [id])
+  uTMTrackingId String?
+
+  @@index([createdAt])
+  @@index([utmSource])
+  @@index([productId])
+  @@map("visits")
+}
+
+model UTMTracking {
+  id          String       @id @default(cuid())
+  utmSource   String?      @map("utm_source")
+  utmMedium   String?      @map("utm_medium")
+  utmCampaign String?      @map("utm_campaign")
+  visits      Visit[]
+  conversions Conversion[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+
+  @@index([utmSource])
+  @@index([createdAt])
+  @@map("utm_tracking")
+}
+
+model Conversion {
+  id            String       @id @default(cuid())
+  visitId       String?      @map("visit_id")
+  orderId       String       @map("order_id")
+  order         Order        @relation(fields: [orderId], references: [id])
+  utmSource     String?      @map("utm_source")
+  value         Decimal      @db.Decimal(10, 2)
+  createdAt     DateTime     @default(now()) @map("created_at")
+  UTMTracking   UTMTracking? @relation(fields: [uTMTrackingId], references: [id])
+  uTMTrackingId String?
+
+  @@index([createdAt])
+  @@index([utmSource])
+  @@map("conversions")
+}
