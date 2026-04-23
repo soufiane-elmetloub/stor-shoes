@@ -1,39 +1,91 @@
+# ==========================================
+# StorShoes — .gitignore
+# ==========================================
+
 # Dependencies
 node_modules/
 .pnpm-store/
+.yarn/
 
 # Build outputs
 dist/
 .next/
 out/
 build/
+*.tsbuildinfo
 
-# Environment
+# Environment variables (NEVER commit these)
 .env
 .env.local
+.env.development.local
+.env.test.local
 .env.production
+.env.production.local
 .env.*.local
 
-# IDE
+# Keep the example file
+!.env.example
+
+# IDE & editors
 .vscode/
 .idea/
 *.swp
 *.swo
+*.suo
+.project
+.classpath
 
-# OS
+# OS files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
 # Logs
+logs/
 *.log
 npm-debug.log*
 pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # Prisma
 apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+
+# Uploads directory (binary files — store separately)
+uploads/*
+!uploads/.gitkeep
 
 # Testing
 coverage/
+.nyc_output/
 
-# Docker
+# Docker volumes
 docker-data/
+postgres-data/
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+
+# Next.js
+.next/
+next-env.d.ts
+
+# Turbo
+.turbo/
