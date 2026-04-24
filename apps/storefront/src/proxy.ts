@@ -35,11 +35,9 @@ const securityHeaders = {
   'X-XSS-Protection': '1; mode=block',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
-  // NOTE: Strict-Transport-Security disabled for localhost development
-  // Enable in production: 'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
 };
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const response = NextResponse.next();
 
   // Add security headers to all responses
@@ -47,14 +45,10 @@ export function middleware(request: NextRequest) {
     response.headers.set(header, value);
   });
 
-  // Add nonce for inline scripts (optional, for stricter CSP)
-  // const nonce = crypto.randomUUID();
-  // response.headers.set('X-Nonce', nonce);
-
   return response;
 }
 
-// Apply middleware to all routes
+// Apply proxy to all routes except Next.js internals
 export const config = {
   matcher: [
     '/',
