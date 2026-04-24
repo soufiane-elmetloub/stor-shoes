@@ -11,15 +11,25 @@ async function bootstrap() {
   // Global prefix
   app.setGlobalPrefix('api');
 
-  // Serve static uploads using native NestJS
-  app.useStaticAssets(path.join(process.cwd(), '..', '..', 'uploads'), {
-    prefix: '/uploads',
-  });
+  // Serve static uploads — absolute path works on any host
+  const uploadsPath = process.env.UPLOADS_PATH
+    ? path.resolve(process.env.UPLOADS_PATH)
+    : path.join(__dirname, '..', '..', '..', '..', 'uploads');
 
-  // CORS
+  app.useStaticAssets(uploadsPath, { prefix: '/uploads' });
+
+  // CORS — allow localhost (dev) + Vercel storefront (prod)
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    ...(process.env.ALLOWED_ORIGINS
+      ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+      : []),
+  ];
+
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:5173'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: allowedOrigins,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
@@ -42,9 +52,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = process.env.API_PORT || 3001;
-  await app.listen(port);
-  console.log(`🚀 StorShoes API running on http://localhost:${port}`);
-  console.log(`📚 Swagger docs: http://localhost:${port}/api/docs`);
+  // Railway injects PORT dynamically — must use process.env.PORT
+  const port = process.env.PORT || process.env.API_PORT || 3001;
+  await app.listen(port, '0.0.0.0');
+  console.log(`🚀 StorShoes API running on port ${port}`);
+  console.log(`📚 Swagger docs available at /api/docs`);
 }
 bootstrap();
