@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import "./globals.css";
 
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Suspense fallback={null}>
           <AnalyticsTracker />
         </Suspense>
+        <SpeedInsights />
       </body>
     </html>
   );
