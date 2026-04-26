@@ -132,6 +132,29 @@ export default function CartPage() {
             justify-content: center;
             width: 100%;
           }
+          .cart-total-row {
+            gap: 0.75rem !important;
+            flex-wrap: nowrap !important;
+          }
+          .cart-total-label {
+            font-size: 0.85rem !important;
+            white-space: nowrap !important;
+          }
+          .cart-total-price {
+            font-size: 1.25rem !important;
+            white-space: nowrap !important;
+          }
+        }
+        @media (max-width: 380px) {
+          .cart-total-label {
+            font-size: 0.75rem !important;
+          }
+          .cart-total-price {
+            font-size: 1.1rem !important;
+          }
+          .cart-total-row {
+            gap: 0.5rem !important;
+          }
         }
       `}</style>
 
@@ -240,8 +263,8 @@ export default function CartPage() {
       {/* ── Cart Total & Checkout Action ── */}
       <div className="cart-total-container">
         <div className="cart-total-row">
-          <span style={{ fontSize: '1.2rem', color: '#000', fontWeight: 600, fontFamily: INTER, textTransform: 'uppercase', letterSpacing: '0.05em' }}>TOTAL ESTIMÉ</span>
-          <span style={{ fontFamily: INTER, fontSize: '2rem', fontWeight: 700, color: '#000', letterSpacing: '-0.02em' }}>
+          <span className="cart-total-label" style={{ fontSize: '1.2rem', color: '#000', fontWeight: 600, fontFamily: INTER, textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>TOTAL ESTIMÉ</span>
+          <span className="cart-total-price" style={{ fontFamily: INTER, fontSize: '2rem', fontWeight: 700, color: '#000', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
             {totalPrice.toLocaleString('en-US')} MAD
           </span>
         </div>

@@ -230,19 +230,25 @@ function ProductsContent() {
             .desktop-filters {
               display: flex;
               flex-direction: column;
+              flex-wrap: nowrap !important;
               gap: 1.5rem;
               position: fixed;
-              top: 64px; /* يبدأ تحت شريط التنقل العلوي */
+              top: 64px;
               right: 0;
-              bottom: 0; /* امتداد كامل لتجنب المظهر المقطوع */
+              bottom: 0;
               width: 85%;
               max-width: 320px;
               background: #fff;
-              z-index: 40; /* z-index أقل ليظل شريط التنقل العلوي/السفلي فوق الفلتر */
-              padding: 1.5rem 1.5rem 6rem 1.5rem; /* مساحة سفلية كافية (padding) لعدم تغطية الأزرار */
+              z-index: 40;
+              padding: 1.5rem 1.5rem 6rem 1.5rem;
               transform: translateX(100%);
               transition: transform 0.3s ease-in-out;
               box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+              overflow-y: auto;
+            }
+            .desktop-filters > div {
+              width: 100% !important;
+              flex-shrink: 0;
             }
             .desktop-filters.mobile-open {
               transform: translateX(0);
@@ -264,12 +270,12 @@ function ProductsContent() {
             .mobile-filters-backdrop {
               display: block;
               position: fixed;
-              top: 64px; /* يبدأ تحت شريط التنقل العلوي */
+              top: 64px;
               left: 0;
               right: 0;
-              bottom: 0; /* يغطي الشاشة بالكامل */
+              bottom: 0;
               background: rgba(0,0,0,0.5);
-              z-index: 30; /* تحت النافذة وتحت شريط التنقل */
+              z-index: 30;
               opacity: 0;
               pointer-events: none;
               transition: opacity 0.3s ease-in-out;
@@ -287,10 +293,13 @@ function ProductsContent() {
               bottom: 0;
               left: 0;
               right: 0;
-              padding: 1rem 1.5rem 1.5rem 1.5rem; /* حشوة إضافية من الأسفل */
+              padding: 1rem 1.5rem 1.5rem 1.5rem;
               background: #fff;
               border-top: 1px solid #e2e8f0;
               z-index: 10;
+            }
+            .mobile-filter-sort-group {
+              margin-bottom: 0 !important;
             }
           }
         `}</style>
@@ -332,7 +341,7 @@ function ProductsContent() {
             </select>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '8rem' }}>
+          <div className="mobile-filter-sort-group" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '8rem' }}>
             <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Trier par</label>
             <select style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', width: '100%', outline: 'none', background: '#f8fafc' }}
               value={`${filters.sortBy}-${filters.sortOrder}`}
