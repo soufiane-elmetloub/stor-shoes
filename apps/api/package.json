@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prebuild": "npx prisma generate --schema=prisma/schema.prisma",
-    "build": "npx prisma generate --schema=prisma/schema.prisma && npx prisma migrate deploy --schema=prisma/schema.prisma && nest build",
+    "build": "npx prisma generate --schema=prisma/schema.prisma && nest build",
     "postinstall": "npx prisma generate --schema=prisma/schema.prisma",
     "start": "npx prisma generate --schema=prisma/schema.prisma && nest start",
     "start:dev": "npx prisma generate --schema=prisma/schema.prisma && nest start --watch",
