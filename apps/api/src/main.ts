@@ -19,16 +19,11 @@ async function bootstrap() {
   app.useStaticAssets(uploadsPath, { prefix: '/uploads' });
 
   // CORS — allow localhost (dev) + Vercel storefront (prod)
-  const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    ...(process.env.ALLOWED_ORIGINS
-      ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
-      : []),
-  ];
-
   app.enableCors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // Allow all origins (true) for easier deployment testing
+      callback(null, true);
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
