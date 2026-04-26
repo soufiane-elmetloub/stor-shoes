@@ -67,6 +67,30 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
+    <>
+    <style>{`
+      @media (max-width: 768px) {
+        .product-card-price-row {
+          gap: 0.25rem !important;
+          flex-wrap: nowrap !important;
+          white-space: nowrap !important;
+        }
+        .product-card-price-current {
+          font-size: 0.78rem !important;
+        }
+        .product-card-price-original {
+          font-size: 0.58rem !important;
+        }
+      }
+      @media (max-width: 380px) {
+        .product-card-price-current {
+          font-size: 0.7rem !important;
+        }
+        .product-card-price-original {
+          font-size: 0.52rem !important;
+        }
+      }
+    `}</style>
     <Link href={`/products/${product.slug}`} style={{ textDecoration: 'none' }} aria-label={`View ${product.name} details`}>
       <article style={{
         background: 'white', borderRadius: '1rem', overflow: 'hidden',
@@ -134,12 +158,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           <h3 aria-label={`Product name: ${product.name}`} style={{ fontSize: '0.95rem', fontWeight: 600, color: '#0f172a', marginTop: '0.25rem', lineHeight: 1.4 }}>
             {product.name}
           </h3>
-          <div role="group" aria-label={`Price: ${Number(displayPrice).toLocaleString('en-US')} Moroccan Dirhams`} style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.75rem' }}>
-            <span aria-label={`Current price ${Number(displayPrice).toLocaleString('en-US')} MAD`} style={{ fontSize: '1.15rem', fontWeight: 800, color: hasDiscount ? '#ef4444' : '#0f172a' }}>
+          <div role="group" aria-label={`Price: ${Number(displayPrice).toLocaleString('en-US')} Moroccan Dirhams`} className="product-card-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.75rem', flexWrap: 'nowrap' }}>
+            <span aria-label={`Current price ${Number(displayPrice).toLocaleString('en-US')} MAD`} className="product-card-price-current" style={{ fontSize: '1.15rem', fontWeight: 800, color: hasDiscount ? '#ef4444' : '#0f172a', whiteSpace: 'nowrap' }}>
               {Number(displayPrice).toLocaleString('en-US')} MAD
             </span>
             {hasDiscount && (
-              <span aria-label={`Original price ${Number(product.price).toLocaleString('en-US')} MAD`} style={{ fontSize: '0.8rem', color: '#475569', textDecoration: 'line-through' }}>
+              <span aria-label={`Original price ${Number(product.price).toLocaleString('en-US')} MAD`} className="product-card-price-original" style={{ fontSize: '0.8rem', color: '#475569', textDecoration: 'line-through', whiteSpace: 'nowrap' }}>
                 {Number(product.price).toLocaleString('en-US')} MAD
               </span>
             )}
@@ -147,5 +171,6 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </article>
     </Link>
+    </>
   );
 }

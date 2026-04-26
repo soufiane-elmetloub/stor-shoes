@@ -380,7 +380,7 @@ export default function ContactPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.8rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div className="form-grid-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                     <label style={labelStyle}>
                       Nom complet | الاسم الكامل 
@@ -572,6 +572,11 @@ export default function ContactPage() {
                 <style>{`
                   @keyframes spin {
                     to { transform: rotate(360deg); }
+                  }
+                  @media (max-width: 768px) {
+                    .form-grid-row {
+                      grid-template-columns: 1fr !important;
+                    }
                   }
                 `}</style>
               </form>

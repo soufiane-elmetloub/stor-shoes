@@ -111,12 +111,6 @@ export default function ProductDetailPage() {
           max-width: 400px;
           margin-left: 6rem;
         }
-        .mobile-sticky-cta {
-          display: flex;
-          flex-direction: column;
-          gap: 0.45rem;
-          margin-top: 1rem;
-        }
         
         @media (max-width: 768px) {
           .product-grid {
@@ -143,26 +137,37 @@ export default function ProductDetailPage() {
             margin-left: 0;
             max-width: 100%;
           }
-          .mobile-sticky-cta {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            background: white;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-            margin-top: 0;
-            border-top-left-radius: 1.5rem;
-            border-top-right-radius: 1.5rem;
+          .product-detail-price-row {
+            gap: 0.3rem !important;
+            flex-wrap: nowrap !important;
+            white-space: nowrap !important;
           }
-          .padding-bottom-spacer {
-            padding-bottom: 120px;
+          .product-detail-price-current {
+            font-size: 1rem !important;
+          }
+          .product-detail-price-original {
+            font-size: 0.68rem !important;
+          }
+          .product-detail-price-badge {
+            font-size: 0.6rem !important;
+            padding: 0.05rem 0.35rem !important;
+          }
+        }
+        @media (max-width: 380px) {
+          .product-detail-price-current {
+            font-size: 0.88rem !important;
+          }
+          .product-detail-price-original {
+            font-size: 0.6rem !important;
+          }
+          .product-detail-price-badge {
+            font-size: 0.55rem !important;
+            padding: 0.05rem 0.3rem !important;
           }
         }
       `}</style>
 
-      <div className="product-grid padding-bottom-spacer">
+      <div className="product-grid">
 
         {/* ── Image Gallery ── */}
         <div className="gallery-container">
@@ -283,14 +288,14 @@ export default function ProductDetailPage() {
           )}
           <p style={{ fontSize: '0.9rem', fontWeight: 400, color: '#000000', marginTop: '0.25rem', marginBottom: 0, fontFamily: "'Inter', system-ui, sans-serif", lineHeight: 1.4 }}>{product.name}</p>
 
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.6rem' }}>
-            <span style={{ fontSize: '1.4rem', fontWeight: 300, color: '#000000', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.01em' }}>
+          <div className="product-detail-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.6rem', flexWrap: 'nowrap' }}>
+            <span className="product-detail-price-current" style={{ fontSize: '1.4rem', fontWeight: 300, color: '#000000', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.01em', whiteSpace: 'nowrap' }}>
               {Number(product.salePrice || product.price).toLocaleString('en-US')} MAD
             </span>
             {hasDiscount && (
               <>
-                <span style={{ fontSize: '0.85rem', color: '#475569', textDecoration: 'line-through', fontFamily: "'Inter', system-ui, sans-serif", fontWeight: 300 }}>{Number(product.price).toLocaleString('en-US')} MAD</span>
-                <span style={{ background: '#b91c1c', color: '#ffffff', padding: '0.1rem 0.5rem', borderRadius: '0.375rem', fontSize: '0.72rem', fontWeight: 600, fontFamily: "'Inter', system-ui, sans-serif" }}>
+                <span className="product-detail-price-original" style={{ fontSize: '0.85rem', color: '#475569', textDecoration: 'line-through', fontFamily: "'Inter', system-ui, sans-serif", fontWeight: 300, whiteSpace: 'nowrap' }}>{Number(product.price).toLocaleString('en-US')} MAD</span>
+                <span className="product-detail-price-badge" style={{ background: '#b91c1c', color: '#ffffff', padding: '0.1rem 0.5rem', borderRadius: '0.375rem', fontSize: '0.72rem', fontWeight: 600, fontFamily: "'Inter', system-ui, sans-serif", whiteSpace: 'nowrap' }}>
                   Promotion
                 </span>
               </>
@@ -380,7 +385,7 @@ export default function ProductDetailPage() {
             )}
           </div>
 
-          <div className="mobile-sticky-cta">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', marginTop: '1rem', position: 'relative' }}>
             <button onClick={handleAddToCart} disabled={!selectedVariant || selectedVariant.stock === 0}
               aria-label="Ajouter au panier"
               style={{

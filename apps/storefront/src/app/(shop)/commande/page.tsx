@@ -187,12 +187,42 @@ function CommandeContent() {
           gap: 2.5rem;
           align-items: start;
         }
+        .order-summary-container {
+          border: 1px solid #e5e7eb;
+          border-radius: 0.75rem;
+          padding: 1.5rem;
+          position: sticky;
+          top: 2rem;
+        }
+        .desktop-submit-btn {
+          display: block;
+        }
+        .mobile-submit-btn {
+          display: none;
+        }
         @media (max-width: 768px) {
           .checkout-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
             display: flex;
             flex-direction: column-reverse; /* Put summary on top of form on mobile */
+          }
+          .order-summary-container {
+            position: relative;
+            top: auto;
+          }
+          .form-grid-row {
+            grid-template-columns: 1fr !important;
+          }
+          .desktop-submit-btn {
+            display: none !important;
+          }
+          .mobile-submit-btn-wrapper {
+            display: flex !important;
+            justify-content: flex-start;
+            width: 100%;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
           }
         }
       `}</style>
@@ -210,7 +240,7 @@ function CommandeContent() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
 
               {/* Row 1: Full Name + Phone */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-grid-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
                   <label style={labelStyle}>Nom complet | الاسم الكامل <span style={{ color: '#ef4444' }}>*</span></label>
                   <input
@@ -238,7 +268,7 @@ function CommandeContent() {
               </div>
 
               {/* Row 2: City + Address */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="form-grid-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
                   <label style={labelStyle}>Ville | المدينة <span style={{ color: '#ef4444' }}>*</span></label>
                   <input
@@ -299,10 +329,31 @@ function CommandeContent() {
               ))}
             </div>
           </div>
+
+          {/* Submit Mobile Only */}
+          <div className="mobile-submit-btn-wrapper" style={{ display: 'none' }}>
+            <button onClick={handleSubmit} disabled={submitting}
+              className="mobile-submit-btn"
+              style={{
+                width: '100%', maxWidth: '300px', margin: '0 auto 0 calc(50% - 130px)', padding: '1rem 2rem',
+                borderRadius: '99px', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
+                background: submitting ? '#555' : '#000', color: '#fff',
+                fontFamily: INTER, fontWeight: 700, fontSize: '0.9rem',
+                letterSpacing: '0.06em', textTransform: 'uppercase',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 8px 20px -4px rgba(0, 0, 0, 0.2), 0 4px 10px -2px rgba(0, 0, 0, 0.1)',
+                display: 'block',
+              }}
+              onMouseEnter={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'; } }}
+              onMouseLeave={e => { if (!submitting) { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 20px -4px rgba(0, 0, 0, 0.2), 0 4px 10px -2px rgba(0, 0, 0, 0.1)'; } }}>
+              {submitting ? 'Confirmation...' : 'Confirmer la commande'}
+            </button>
+          </div>
+
         </div>
 
         {/* ── RIGHT: Order Summary ── */}
-        <div style={{ border: '1px solid #e5e7eb', borderRadius: '0.75rem', padding: '1.5rem', position: 'sticky', top: '2rem' }}>
+        <div className="order-summary-container">
           <h2 style={{ fontFamily: PLAYFAIR, fontSize: '1.1rem', fontWeight: 700, color: '#000', margin: '0 0 1.2rem 0' }}>
             Récapitulatif
           </h2>
@@ -433,8 +484,9 @@ function CommandeContent() {
             </div>
           </div>
 
-          {/* Submit */}
+          {/* Submit Desktop Only */}
           <button onClick={handleSubmit} disabled={submitting}
+            className="desktop-submit-btn"
             style={{
               width: '100%', marginTop: '1.2rem', padding: '0.75rem',
               borderRadius: '0.5rem', border: '1.5px solid #000', cursor: submitting ? 'not-allowed' : 'pointer',

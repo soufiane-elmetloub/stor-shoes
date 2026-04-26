@@ -75,6 +75,202 @@ export default function WishlistPage() {
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '2rem 1.5rem' }}>
+
+      {/* ── Mobile-specific styles ── */}
+      <style>{`
+        .wishlist-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .wishlist-card-info {
+          padding: 1rem 1.25rem;
+        }
+
+        .wishlist-card-brand {
+          font-size: 0.7rem;
+        }
+
+        .wishlist-card-name {
+          font-size: 0.95rem;
+          margin-top: 0.25rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .wishlist-price-row {
+          display: flex;
+          align-items: baseline;
+          gap: 0.5rem;
+        }
+
+        .wishlist-price-current {
+          font-size: 1.15rem;
+          font-weight: 800;
+        }
+
+        .wishlist-price-original {
+          font-size: 0.8rem;
+        }
+
+        .wishlist-card-btn {
+          display: block;
+          margin-top: 1rem;
+          background: #000;
+          color: #fff;
+          padding: 0.75rem 1rem;
+          border-radius: 0.5rem;
+          text-align: center;
+          font-family: ${INTER};
+          font-size: 0.85rem;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 0.2s ease;
+        }
+
+        .wishlist-card-btn:hover {
+          background: #333;
+        }
+
+        .wishlist-remove-btn {
+          position: absolute;
+          top: 0.75rem;
+          right: 0.75rem;
+          z-index: 10;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.9);
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          color: #ef4444;
+        }
+
+        .wishlist-remove-btn:hover {
+          background: #fef2f2;
+          transform: scale(1.1);
+        }
+
+        /* ─── Tablets & large phones (481px – 768px): 2 columns, tighter ─── */
+        @media (max-width: 768px) {
+          .wishlist-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+          }
+
+          .wishlist-card-info {
+            padding: 0.6rem 0.7rem 0.75rem;
+          }
+
+          .wishlist-card-brand {
+            font-size: 0.6rem;
+          }
+
+          .wishlist-card-name {
+            font-size: 0.78rem;
+            margin-top: 0.15rem;
+            margin-bottom: 0.4rem;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
+          .wishlist-price-row {
+            gap: 0.25rem;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+          }
+
+          .wishlist-price-current {
+            font-size: 0.78rem;
+          }
+
+          .wishlist-price-original {
+            font-size: 0.58rem;
+          }
+
+          .wishlist-card-btn {
+            margin-top: 0.6rem;
+            padding: 0.5rem 0.5rem;
+            font-size: 0.7rem;
+            border-radius: 0.4rem;
+            letter-spacing: 0.02em;
+          }
+
+          .wishlist-remove-btn {
+            width: 28px;
+            height: 28px;
+            top: 0.5rem;
+            right: 0.5rem;
+          }
+
+          .wishlist-remove-btn svg {
+            width: 13px;
+            height: 13px;
+          }
+        }
+
+        /* ─── Small phones (≤480px): single column, spacious cards ─── */
+        @media (max-width: 480px) {
+          .wishlist-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
+          .wishlist-card-info {
+            padding: 0.85rem 1rem;
+          }
+
+          .wishlist-card-brand {
+            font-size: 0.65rem;
+          }
+
+          .wishlist-card-name {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            -webkit-line-clamp: unset;
+          }
+
+          .wishlist-price-row {
+            gap: 0.4rem;
+          }
+
+          .wishlist-price-current {
+            font-size: 1rem;
+          }
+
+          .wishlist-price-original {
+            font-size: 0.72rem;
+          }
+
+          .wishlist-card-btn {
+            margin-top: 0.75rem;
+            padding: 0.65rem 1rem;
+            font-size: 0.78rem;
+            border-radius: 0.5rem;
+          }
+
+          .wishlist-remove-btn {
+            width: 32px;
+            height: 32px;
+            top: 0.65rem;
+            right: 0.65rem;
+          }
+
+          .wishlist-remove-btn svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      `}</style>
+
       {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontFamily: PLAYFAIR, fontSize: '2rem', fontWeight: 600, color: '#1f2937', marginBottom: '0.5rem' }}>
@@ -117,7 +313,7 @@ export default function WishlistPage() {
       </div>
 
       {/* Wishlist Grid */}
-      <div className="product-grid-container">
+      <div className="wishlist-grid">
         {items.map((item) => (
           <div
             key={item.productId}
@@ -141,51 +337,26 @@ export default function WishlistPage() {
           >
             {/* Remove Button */}
             <button
+              className="wishlist-remove-btn"
               onClick={() => removeItem(item.productId)}
-              style={{
-                position: 'absolute',
-                top: '0.75rem',
-                right: '0.75rem',
-                zIndex: 10,
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                background: 'rgba(255,255,255,0.9)',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                color: '#ef4444',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#fef2f2';
-                e.currentTarget.style.transform = 'scale(1.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.9)';
-                e.currentTarget.style.transform = 'scale(1)';
-              }}
               title="Retirer des favoris"
             >
               <TrashIcon />
             </button>
 
-            {/* Product Image */}
-            <Link href={`/products/${item.slug}`} style={{ textDecoration: 'none' }}>
-              <div style={{ position: 'relative', paddingTop: '100%', background: '#f8fafc', overflow: 'hidden' }}>
+            {/* Product Image — fixed 1:1 aspect ratio */}
+            <Link href={`/products/${item.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+              <div style={{ position: 'relative', aspectRatio: '1 / 1', background: '#f8fafc', overflow: 'hidden' }}>
                 {item.image ? (
                   <img
                     src={item.image}
                     alt={item.name}
-                    width={300} height={300}
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                    width={400} height={400}
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
                     loading="lazy"
                   />
                 ) : (
-                  <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af' }}>
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af', fontFamily: INTER, fontSize: '0.85rem' }}>
                     No Image
                   </div>
                 )}
@@ -193,51 +364,32 @@ export default function WishlistPage() {
             </Link>
 
             {/* Product Info */}
-            <div style={{ padding: '1rem 1.25rem' }}>
+            <div className="wishlist-card-info">
               {item.brand && (
-                <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <span className="wishlist-card-brand" style={{ fontWeight: 600, color: '#3b82f6', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block' }}>
                   {item.brand}
                 </span>
               )}
               <Link href={`/products/${item.slug}`} style={{ textDecoration: 'none' }}>
-                <h2 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#0f172a', marginTop: '0.25rem', lineHeight: 1.4, marginBottom: '0.75rem' }}>
+                <h2 className="wishlist-card-name" style={{ fontWeight: 600, color: '#0f172a', lineHeight: 1.4 }}>
                   {item.name}
                 </h2>
               </Link>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1.15rem', fontWeight: 800, color: item.originalPrice ? '#ef4444' : '#0f172a' }}>
+              <div className="wishlist-price-row">
+                <span className="wishlist-price-current" style={{ color: item.originalPrice ? '#ef4444' : '#0f172a', whiteSpace: 'nowrap' }}>
                   {Number(item.originalPrice || item.price).toLocaleString('en-US')} MAD
                 </span>
                 {item.originalPrice && (
-                  <span style={{ fontSize: '0.8rem', color: '#94a3b8', textDecoration: 'line-through' }}>
+                  <span className="wishlist-price-original" style={{ color: '#94a3b8', textDecoration: 'line-through', whiteSpace: 'nowrap' }}>
                     {Number(item.price).toLocaleString('en-US')} MAD
                   </span>
                 )}
               </div>
 
-              {/* Add to Cart Button */}
+              {/* View Product Button */}
               <Link
                 href={`/products/${item.slug}`}
-                style={{
-                  display: 'block',
-                  marginTop: '1rem',
-                  background: '#000',
-                  color: '#fff',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  textAlign: 'center',
-                  fontFamily: INTER,
-                  fontSize: '0.85rem',
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#333';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#000';
-                }}
+                className="wishlist-card-btn"
               >
                 Voir le produit
               </Link>

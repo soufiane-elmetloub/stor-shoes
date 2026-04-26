@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import ProductCard from '@/components/ProductCard';
 import type { ProductCategory } from '@/types';
 
@@ -198,6 +199,7 @@ function ProductsContent() {
 
   const selectedCategoryName = categories.find((c: ProductCategory) => c.id === filters.categoryId)?.name;
   const pageTitle = selectedCategoryName || 'All Products';
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '2rem 1.5rem' }}>
@@ -212,26 +214,183 @@ function ProductsContent() {
           {total} products
         </div>
         
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <select style={{ padding: '0.625rem 1rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', minWidth: 140, outline: 'none' }}
-            value={filters.categoryId} onChange={(e) => { setFilters({...filters, categoryId: e.target.value}); setPage(1); }}>
-            <option value="">All Categories</option>
-            {categories.map((c: ProductCategory) => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
-          <select style={{ padding: '0.625rem 1rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', minWidth: 120, outline: 'none' }}
-            value={filters.size} onChange={(e) => { setFilters({...filters, size: e.target.value}); setPage(1); }}>
-            <option value="">All Sizes</option>
-            {SIZES.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-          <select style={{ padding: '0.625rem 1rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', minWidth: 150, outline: 'none' }}
-            value={`${filters.sortBy}-${filters.sortOrder}`}
-            onChange={(e) => { const [sortBy, sortOrder] = e.target.value.split('-'); setFilters({...filters, sortBy, sortOrder: sortOrder as 'asc'|'desc'}); setPage(1); }}>
-            <option value="createdAt-desc">Newest</option>
-            <option value="price-asc">Price: Low → High</option>
-            <option value="price-desc">Price: High → Low</option>
-            <option value="name-asc">Name</option>
-            <option value="viewCount-desc">Most Viewed</option>
-          </select>
+        <style>{`
+          .desktop-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+          }
+          .mobile-filter-btn {
+            display: none;
+          }
+          .mobile-filters-backdrop {
+            display: none;
+          }
+          @media (max-width: 768px) {
+            .desktop-filters {
+              display: flex;
+              flex-direction: column;
+              gap: 1.5rem;
+              position: fixed;
+              top: 64px; /* يبدأ تحت شريط التنقل العلوي */
+              right: 0;
+              bottom: 0; /* امتداد كامل لتجنب المظهر المقطوع */
+              width: 85%;
+              max-width: 320px;
+              background: #fff;
+              z-index: 40; /* z-index أقل ليظل شريط التنقل العلوي/السفلي فوق الفلتر */
+              padding: 1.5rem 1.5rem 6rem 1.5rem; /* مساحة سفلية كافية (padding) لعدم تغطية الأزرار */
+              transform: translateX(100%);
+              transition: transform 0.3s ease-in-out;
+              box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+            .desktop-filters.mobile-open {
+              transform: translateX(0);
+            }
+            .mobile-filter-btn {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+              padding: 0.625rem 1.25rem;
+              border: 1px solid #e2e8f0;
+              border-radius: 0.5rem;
+              background: #fff;
+              font-size: 0.875rem;
+              font-weight: 600;
+              color: #000;
+              cursor: pointer;
+            }
+            .mobile-filters-backdrop {
+              display: block;
+              position: fixed;
+              top: 64px; /* يبدأ تحت شريط التنقل العلوي */
+              left: 0;
+              right: 0;
+              bottom: 0; /* يغطي الشاشة بالكامل */
+              background: rgba(0,0,0,0.5);
+              z-index: 30; /* تحت النافذة وتحت شريط التنقل */
+              opacity: 0;
+              pointer-events: none;
+              transition: opacity 0.3s ease-in-out;
+            }
+            .mobile-filters-backdrop.mobile-open {
+              opacity: 1;
+              pointer-events: auto;
+            }
+            .mobile-filters-header {
+              display: flex !important;
+            }
+            .mobile-filters-footer {
+              display: flex !important;
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              padding: 1rem 1.5rem 1.5rem 1.5rem; /* حشوة إضافية من الأسفل */
+              background: #fff;
+              border-top: 1px solid #e2e8f0;
+              z-index: 10;
+            }
+          }
+        `}</style>
+
+        <div 
+          className={`mobile-filters-backdrop ${showMobileFilters ? 'mobile-open' : ''}`} 
+          onClick={() => setShowMobileFilters(false)}
+        />
+
+        <button 
+          className="mobile-filter-btn" 
+          onClick={() => setShowMobileFilters(true)}
+        >
+          <Image src="/icons/filter.png" alt="Filter icon" width={16} height={16} unoptimized />
+          Filter et trier
+        </button>
+
+        <div className={`desktop-filters ${showMobileFilters ? 'mobile-open' : ''}`}>
+          <div className="mobile-filters-header" style={{ display: 'none', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+            <span style={{ fontWeight: 700, fontSize: '1.2rem', fontFamily: "'Playfair Display', Georgia, serif" }}>Filter et trier</span>
+            <button onClick={() => setShowMobileFilters(false)} style={{ background: 'none', border: 'none', fontSize: '1.8rem', cursor: 'pointer', color: '#64748b' }}>&times;</button>
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Catégorie</label>
+            <select style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', width: '100%', outline: 'none', background: '#f8fafc' }}
+              value={filters.categoryId} onChange={(e) => { setFilters({...filters, categoryId: e.target.value}); setPage(1); }}>
+              <option value="">All Categories</option>
+              {categories.map((c: ProductCategory) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Pointure</label>
+            <select style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', width: '100%', outline: 'none', background: '#f8fafc' }}
+              value={filters.size} onChange={(e) => { setFilters({...filters, size: e.target.value}); setPage(1); }}>
+              <option value="">All Sizes</option>
+              {SIZES.map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '8rem' }}>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#64748b' }}>Trier par</label>
+            <select style={{ padding: '0.75rem 1rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', width: '100%', outline: 'none', background: '#f8fafc' }}
+              value={`${filters.sortBy}-${filters.sortOrder}`}
+              onChange={(e) => { const [sortBy, sortOrder] = e.target.value.split('-'); setFilters({...filters, sortBy, sortOrder: sortOrder as 'asc'|'desc'}); setPage(1); }}>
+              <option value="createdAt-desc">Newest</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="name-asc">Name</option>
+              <option value="viewCount-desc">Most Viewed</option>
+            </select>
+          </div>
+
+          <div className="mobile-filters-footer" style={{ display: 'none', marginTop: 'auto', gap: '0.5rem' }}>
+            <button 
+              onClick={() => {
+                setFilters({ search: '', categoryId: '', size: '', sortBy: 'createdAt', sortOrder: 'desc' });
+                setPage(1);
+                setShowMobileFilters(false);
+              }}
+              style={{ 
+                flex: 1,
+                padding: '0.875rem 0.5rem', 
+                background: '#fff', 
+                color: '#000', 
+                border: '1px solid #000', 
+                borderRadius: '0.5rem', 
+                fontWeight: 700, 
+                fontSize: '0.75rem',
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'center',
+                textTransform: 'uppercase',
+                letterSpacing: '0.02em'
+              }}>
+              Tout supprimer
+            </button>
+            <button 
+              onClick={() => setShowMobileFilters(false)}
+              style={{ 
+                flex: 1,
+                padding: '0.875rem 0.5rem', 
+                background: '#000', 
+                color: '#fff', 
+                border: 'none', 
+                borderRadius: '0.5rem', 
+                fontWeight: 700, 
+                fontSize: '0.75rem',
+                whiteSpace: 'nowrap',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'center',
+                textTransform: 'uppercase',
+                letterSpacing: '0.02em'
+              }}>
+              Appliquer
+            </button>
+          </div>
         </div>
       </div>
 
