@@ -1,7 +1,7 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://api-production-ba03.up.railway.app/api' : 'http://localhost:3001/api');
 const API_BASE_URL = API_URL.replace(/\/api\/?$/, '');
 
 let isApiOffline = false;
