@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/lib/cart';
 import { useWishlist } from '@/lib/wishlist';
+import { getImageUrl } from '@/lib/api';
 
 export default function Header() {
   const { totalItems } = useCart();
@@ -276,7 +277,7 @@ export default function Header() {
                             onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc' }}
                             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}>
                             {p.images?.[0]?.url ? (
-                              <img src={p.images[0].url} alt="" width={44} height={44} style={{ width: 44, height: 44, borderRadius: '0.35rem', objectFit: 'cover', background: '#f1f5f9' }} />
+                              <img src={getImageUrl(p.images[0].url)} alt="" width={44} height={44} style={{ width: 44, height: 44, borderRadius: '0.35rem', objectFit: 'cover', background: '#f1f5f9' }} />
                             ) : (
                               <div style={{ width: 44, height: 44, borderRadius: '0.35rem', background: '#f1f5f9' }} aria-hidden="true" />
                             )}

@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     dangerouslyAllowLocalIP:
       process.env.NODE_ENV !== 'production' ||
       process.env.NEXT_IMAGE_ALLOW_LOCAL_IP === 'true',
-    domains: ['api-production-ba03.up.railway.app', 'storshoes-api.up.railway.app'],
+    domains: ['api-production-ba03.up.railway.app', 'storshoes-api.up.railway.app', 'res.cloudinary.com'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -33,6 +33,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
         port: '',
         pathname: '/**',
       },
