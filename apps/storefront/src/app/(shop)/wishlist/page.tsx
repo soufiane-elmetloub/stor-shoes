@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useWishlist } from '@/lib/wishlist';
+import { getImageUrl } from '@/lib/api';
 
 const INTER = "'Inter', system-ui, sans-serif";
 const PLAYFAIR = "'Playfair Display', Georgia, serif";
@@ -349,7 +350,7 @@ export default function WishlistPage() {
               <div style={{ position: 'relative', aspectRatio: '1 / 1', background: '#f8fafc', overflow: 'hidden' }}>
                 {item.image ? (
                   <img
-                    src={item.image}
+                    src={getImageUrl(item.image)}
                     alt={item.name}
                     width={400} height={400}
                     style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}

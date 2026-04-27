@@ -8,6 +8,7 @@ import { useCart } from '@/lib/cart';
 import ProductCard from '@/components/ProductCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { trackProductView } from '@/components/AnalyticsTracker';
+import { getImageUrl } from '@/lib/api';
 import type { Product, ProductVariant, ProductImage } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
@@ -58,7 +59,7 @@ export default function ProductDetailPage() {
   if (!product) return <div style={{ textAlign: 'center', padding: '4rem', color: '#94a3b8' }}><h1>Product not found</h1><Link href="/products" style={{ color: '#3b82f6' }}>Back to Products</Link></div>;
 
   const variants = Array.isArray(product.variants) ? product.variants : [];
-  const selectedMainImageUrl = product.images?.[selectedImage]?.url || product.images?.[0]?.url;
+  const selectedMainImageUrl = getImageUrl(product.images?.[selectedImage]?.url || product.images?.[0]?.url || '');
   const uniqueColors = [...new Map(variants.map((v: ProductVariant) => [v.color, v])).values()] as ProductVariant[];
   const uniqueSizes = [...new Set(variants.filter((v: ProductVariant) => !selectedColor || v.color === selectedColor).map((v: ProductVariant) => v.size))] as string[];
   const selectedVariant = variants.find((v: ProductVariant) => v.size === selectedSize && (!selectedColor || v.color === selectedColor));
@@ -68,7 +69,7 @@ export default function ProductDetailPage() {
     if (!selectedVariant || !selectedVariant.id) return;
     addItem({
       productId: product.id, variantId: selectedVariant.id,
-      name: product.name, image: product.images?.[0]?.url || '',
+      name: product.name, image: getImageUrl(product.images?.[0]?.url || ''),
       size: selectedSize, color: selectedColor,
       price: Number(product.salePrice || product.price), quantity,
       stock: selectedVariant.stock,
@@ -187,7 +188,7 @@ export default function ProductDetailPage() {
                     flexShrink: 0,
                   }}>
                   <Image
-                    src={img.url}
+                    src={getImageUrl(img.url)}
                     alt={`View ${i + 1}`}
                     width={64}
                     height={64}
@@ -407,7 +408,7 @@ export default function ProductDetailPage() {
                   productId: product.id,
                   variantId: selectedVariant.id,
                   name: product.name,
-                  image: product.images?.[0]?.url || '',
+                  image: getImageUrl(product.images?.[0]?.url || ''),
                   size: selectedSize,
                   color: selectedColor || '',
                   price: String(Number(product.salePrice || product.price)),

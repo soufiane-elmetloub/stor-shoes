@@ -16,13 +16,19 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'api-production-ba03.up.railway.app',
         port: '',
-        pathname: '/uploads/**',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storshoes-api.up.railway.app',
+        port: '',
+        pathname: '/**',
       },
       {
         protocol: 'http',
         hostname: 'localhost',
         port: '3001',
-        pathname: '/uploads/**',
+        pathname: '/**',
       },
       {
         protocol: 'https',

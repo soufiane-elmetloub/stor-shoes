@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/lib/cart';
+import { getImageUrl } from '@/lib/api';
 
 const INTER = "'Inter', system-ui, sans-serif";
 const PLAYFAIR = "'Playfair Display', Georgia, serif";
@@ -195,7 +196,7 @@ export default function CartPage() {
             {/* ── LEFT: Image + Name + Size ── */}
             <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start', minWidth: 0 }}>
               <div style={{ width: 72, height: 72, borderRadius: '0.5rem', overflow: 'hidden', background: '#f5f5f5', flexShrink: 0 }}>
-                <img src={item.image} alt={item.name} width={72} height={72} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={getImageUrl(item.image)} alt={item.name} width={72} height={72} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column' }}>
                 <h2 style={{ fontFamily: PLAYFAIR, fontWeight: 700, fontSize: '0.95rem', color: '#000', margin: 0, lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

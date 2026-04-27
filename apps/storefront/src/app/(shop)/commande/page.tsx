@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useCart, CartItem } from '@/lib/cart';
 import { trackConversion } from '@/components/AnalyticsTracker';
+import { getImageUrl } from '@/lib/api';
 
 const INTER = "'Inter', system-ui, sans-serif";
 const PLAYFAIR = "'Playfair Display', Georgia, serif";
@@ -364,7 +365,7 @@ function CommandeContent() {
               <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
                 {productImage && (
                   <div style={{ width: 70, height: 70, borderRadius: '0.5rem', overflow: 'hidden', background: '#f5f5f5', flexShrink: 0 }}>
-                    <img src={productImage} alt={productName} width={70} height={70} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={getImageUrl(productImage)} alt={productName} width={70} height={70} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                 )}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
@@ -430,7 +431,7 @@ function CommandeContent() {
                       {/* Image */}
                       {item.image && (
                         <div style={{ width: 70, height: 70, borderRadius: '0.5rem', overflow: 'hidden', background: '#f5f5f5', flexShrink: 0 }}>
-                          <img src={item.image} alt={item.name} width={70} height={70} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          <img src={getImageUrl(item.image)} alt={item.name} width={70} height={70} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                       )}
 
