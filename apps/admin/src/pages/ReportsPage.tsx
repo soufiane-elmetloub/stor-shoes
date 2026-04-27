@@ -90,7 +90,7 @@ export default function ReportsPage() {
                 <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={120} />
                 <Tooltip
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', direction: 'rtl' }}
-                  formatter={(value: number) => [`${value.toLocaleString()} MAD`, 'الإيرادات']}
+                  formatter={(value: any) => [`${Number(value).toLocaleString()} MAD`, 'الإيرادات']}
                 />
                 <Bar dataKey="revenue" fill="#3b82f6" radius={[0, 4, 4, 0]} />
               </BarChart>
@@ -103,10 +103,10 @@ export default function ReportsPage() {
           {report?.topProducts?.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
-                <Pie data={report.topProducts.slice(0, 6)} dataKey="revenue" nameKey="name" cx="50%" cy="50%" outerRadius={100} label={({ name, percent }) => `${name.substring(0, 12)}.. ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+                <Pie data={report.topProducts.slice(0, 6)} dataKey="revenue" nameKey="name" cx="50%" cy="50%" outerRadius={100} label={({ name, percent }: any) => `${name ? name.substring(0, 12) : ''}.. ${((percent || 0) * 100).toFixed(0)}%`} labelLine={false}>
                   {report.topProducts.slice(0, 6).map((_: any, i: number) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Pie>
-                <Tooltip formatter={(value: number) => [`${value.toLocaleString()} MAD`, 'الإيرادات']} />
+                <Tooltip formatter={(value: any) => [`${Number(value).toLocaleString()} MAD`, 'الإيرادات']} />
               </PieChart>
             </ResponsiveContainer>
           ) : <p style={{ color: '#94a3b8', textAlign: 'center', padding: '2rem' }}>لا توجد بيانات</p>}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { productsApi, categoriesApi, uploadsApi, inventoryApi, getImageUrl } from '../services/api';
-import { ArrowRight, Image as ImageIcon, Upload, X, Plus, Trash2 } from 'lucide-react';
+import { ArrowRight, Image as ImageIcon, X, Plus, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function ProductEditorPage() {

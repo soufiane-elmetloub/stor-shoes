@@ -88,7 +88,7 @@ export default function DashboardPage() {
             <YAxis tick={{ fontSize: 11 }} />
             <Tooltip
               contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', direction: 'rtl' }}
-              formatter={(value: number) => [`${value.toLocaleString()} MAD`, 'الإيرادات']}
+              formatter={(value: any) => [`${Number(value).toLocaleString()} MAD`, 'الإيرادات']}
               labelFormatter={(label) => `التاريخ: ${label}`}
             />
             <Area type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} fill="url(#colorRevenue)" />

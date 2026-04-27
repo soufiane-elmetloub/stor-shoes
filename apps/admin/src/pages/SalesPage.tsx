@@ -188,8 +188,8 @@ export default function SalesPage() {
               <DollarSign size={26} />
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '1rem', fontSize: '0.8rem', background: stats?.growthRate >= 0 ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)', padding: '0.35rem 0.75rem', borderRadius: '2rem', width: 'fit-content' }}>
-            {stats?.growthRate >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '1rem', fontSize: '0.8rem', background: (stats?.growthRate || 0) >= 0 ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)', padding: '0.35rem 0.75rem', borderRadius: '2rem', width: 'fit-content' }}>
+            {(stats?.growthRate || 0) >= 0 ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
             {Math.abs(stats?.growthRate || 0).toFixed(1)}% عن الأمس
           </div>
         </div>
@@ -210,7 +210,7 @@ export default function SalesPage() {
             </div>
           </div>
           <div style={{ fontSize: '0.8rem', opacity: 0.85, marginTop: '1rem' }}>
-            متوسط: {stats?.todayOrders > 0 ? Math.round(stats?.todayRevenue / stats?.todayOrders) : 0} MAD
+            متوسط: {(stats?.todayOrders || 0) > 0 ? Math.round((stats?.todayRevenue || 0) / (stats?.todayOrders || 1)) : 0} MAD
           </div>
         </div>
 
@@ -396,8 +396,8 @@ export default function SalesPage() {
               <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} />
               <Tooltip
                 contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', direction: 'rtl' }}
-                formatter={(value: number, name: string) => [
-                  name === 'revenue' ? `${value.toLocaleString()} MAD` : value,
+                formatter={(value: any, name: any) => [
+                  name === 'revenue' ? `${Number(value).toLocaleString()} MAD` : value,
                   name === 'revenue' ? 'الإيرادات' : 'الطلبات'
                 ]}
               />
@@ -431,7 +431,7 @@ export default function SalesPage() {
           <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.5rem' }}>
             🏆 أكثر المنتجات مبيعاً
           </h3>
-          {stats?.topProducts?.length > 0 ? (
+          {stats?.topProducts && stats.topProducts.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>
               <BarChart data={stats.topProducts.slice(0, 6)} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
@@ -439,8 +439,8 @@ export default function SalesPage() {
                 <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={150} />
                 <Tooltip
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', direction: 'rtl' }}
-                  formatter={(value: number) => [
-                    `${value.toLocaleString()} MAD`,
+                  formatter={(value: any) => [
+                    `${Number(value).toLocaleString()} MAD`,
                     'الإيرادات'
                   ]}
                 />
@@ -457,7 +457,7 @@ export default function SalesPage() {
           <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1.5rem' }}>
             💳 طرق الدفع
           </h3>
-          {stats?.paymentMethods?.length > 0 ? (
+          {stats?.paymentMethods && stats.paymentMethods.length > 0 ? (
             <>
               <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
@@ -476,18 +476,18 @@ export default function SalesPage() {
                   </Pie>
                   <Tooltip
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', direction: 'rtl' }}
-                    formatter={(value: number) => [`${value.toLocaleString()} MAD`, 'المبلغ']}
+                    formatter={(value: any) => [`${Number(value).toLocaleString()} MAD`, 'المبلغ']}
                   />
                 </PieChart>
               </ResponsiveContainer>
               <div style={{ marginTop: '1rem' }}>
-                {stats.paymentMethods.map((method: PaymentMethod, i: number) => (
+                {stats?.paymentMethods?.map((method: PaymentMethod, i: number) => (
                   <div key={i} style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     padding: '0.5rem 0',
-                    borderBottom: i < stats.paymentMethods.length - 1 ? '1px solid #e2e8f0' : 'none'
+                    borderBottom: i < (stats?.paymentMethods?.length || 0) - 1 ? '1px solid #e2e8f0' : 'none'
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <div style={{
