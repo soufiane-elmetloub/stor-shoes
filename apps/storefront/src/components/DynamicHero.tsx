@@ -40,7 +40,7 @@ export default function DynamicHero() {
 
   useEffect(() => {
     // Fetch settings from API
-    fetch(`${API_BASE_URL}/api/settings/site`)
+    fetch(`${API_BASE_URL}/settings/site`)
       .then(res => res.json())
       .then(data => {
         console.log('[DynamicHero] API response:', data);

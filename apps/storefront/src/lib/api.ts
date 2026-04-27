@@ -6,7 +6,8 @@ const REQUEST_TIMEOUT = 30000; // 30 seconds
 export const getImageUrl = (url: string) => {
   if (!url) return '';
   if (url.startsWith('http')) return url;
-  return `${API_URL.replace(/\/api$/, '')}${url}`;
+  const baseUrl = API_URL.replace(/\/api$/, '');
+  return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
 };
 
 // Rate Limiting Configuration
