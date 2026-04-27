@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     dangerouslyAllowLocalIP:
       process.env.NODE_ENV !== 'production' ||
       process.env.NEXT_IMAGE_ALLOW_LOCAL_IP === 'true',
+    domains: ['api-production-ba03.up.railway.app', 'storshoes-api.up.railway.app'],
     remotePatterns: [
       {
         protocol: 'https',
