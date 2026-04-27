@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useWishlist } from '@/lib/wishlist';
 import { useState } from 'react';
+import { getImageUrl } from '@/lib/api';
 
 interface ProductCardProps {
   product: {
@@ -129,7 +130,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div style={{ position: 'relative', aspectRatio: '1/1', background: '#f8fafc', overflow: 'hidden' }}>
           {product.images?.[0] && (
             <Image
-              src={product.images[0].url}
+              src={getImageUrl(product.images[0].url)}
               alt={product.images[0].alt || `${product.name} - ${product.brand || 'Product'}`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
