@@ -4,6 +4,7 @@ import { CartProvider } from '@/lib/cart';
 import { WishlistProvider } from '@/lib/wishlist';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main style={{ minHeight: '60vh', paddingTop: '64px' }}>{children}</main>
         <Footer />
+        <WhatsAppButton />
       </WishlistProvider>
     </CartProvider>
   );

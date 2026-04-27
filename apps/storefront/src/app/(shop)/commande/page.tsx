@@ -148,11 +148,21 @@ function CommandeContent() {
   };
 
   if (submitted) return (
-    <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem', fontFamily: INTER }}>
-      <div style={{ fontSize: 48 }}>✅</div>
-      <h2 style={{ fontFamily: PLAYFAIR, fontSize: '1.8rem', fontWeight: 700, color: '#000', margin: 0 }}>Commande confirmée !</h2>
-      <p style={{ color: '#555', fontSize: '0.95rem', margin: 0 }}>Notre équipe vous contactera sous 24h pour confirmer la livraison.</p>
-      <Link href="/products" style={{ marginTop: '1rem', padding: '0.6rem 1.8rem', border: '1.5px solid #000', borderRadius: '0.5rem', color: '#000', fontWeight: 600, fontSize: '0.82rem', letterSpacing: '0.05em', textTransform: 'uppercase', textDecoration: 'none', transition: 'all 0.2s ease' }}>
+    <div style={{ 
+      minHeight: 'calc(100vh - 64px)', 
+      backgroundColor: '#ffffff',
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      gap: '1.5rem', 
+      fontFamily: INTER,
+      padding: '2rem'
+    }}>
+      <div style={{ fontSize: 64, marginTop: '2rem' }}>✅</div>
+      <h2 style={{ fontFamily: PLAYFAIR, fontSize: '1.8rem', fontWeight: 700, color: '#000', margin: 0, textAlign: 'center' }}>Commande confirmée !</h2>
+      <p style={{ color: '#555', fontSize: '0.95rem', margin: 0, padding: '0 2rem', textAlign: 'center', lineHeight: 1.6 }}>Notre équipe vous contactera sous 24h pour confirmer la livraison.</p>
+      <Link href="/products" style={{ marginTop: '0.5rem', padding: '0.8rem 2rem', border: '1.5px solid #000', borderRadius: '0.5rem', color: '#000', fontWeight: 600, fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase', textDecoration: 'none', transition: 'all 0.2s ease' }}>
         Continuer les achats
       </Link>
     </div>

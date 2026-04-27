@@ -26,7 +26,7 @@ export default function BestSellers({ products }: { products: Product[] }) {
         const displayPrice = product.salePrice || product.price;
 
         return (
-          <Link key={product.id} href={`/products/${product.slug}`} style={{ textDecoration: 'none' }}>
+          <Link key={product.id} href={`/products/${product.slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
             <div className="bestseller-card">
               {/* Rank badge */}
               {index < 3 && (
@@ -55,14 +55,15 @@ export default function BestSellers({ products }: { products: Product[] }) {
               </div>
 
               {/* Info */}
-              <div className="p-2 sm:p-4 bg-white relative">
+              <div className="p-4 sm:p-5 bg-white relative flex flex-col flex-grow">
                 {product.brand && (
-                  <span className="text-[0.6rem] font-[600] text-blue-500 uppercase tracking-widest block mb-1 truncate">{product.brand}</span>
+                  <span className="text-[0.6rem] font-[500] sm:text-[0.65rem] sm:font-[600] text-blue-500 uppercase tracking-widest block mb-[0.35rem] whitespace-nowrap overflow-hidden text-ellipsis">{product.brand}</span>
                 )}
-                <h3 className="text-[0.75rem] sm:text-[0.9rem] font-[600] text-slate-900 leading-[1.3] truncate">
+                <h3 className="text-[0.85rem] sm:text-[0.95rem] font-[600] text-slate-900 leading-[1.4] mb-4 sm:mb-3"
+                    style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {product.name}
                 </h3>
-                <div className="flex flex-nowrap items-baseline gap-1 sm:gap-2 mt-1.5 sm:mt-2 overflow-hidden">
+                <div className="flex flex-nowrap items-baseline gap-1 sm:gap-2 mt-auto overflow-hidden">
                   <span className={`text-[0.75rem] sm:text-[1.05rem] font-[800] whitespace-nowrap ${hasDiscount ? 'text-red-500' : 'text-slate-900'}`}>
                     {Number(displayPrice).toLocaleString('en-US')}&nbsp;MAD
                   </span>
@@ -88,6 +89,9 @@ export default function BestSellers({ products }: { products: Product[] }) {
           transition: transform 0.3s ease, box-shadow 0.3s ease;
           position: relative;
           cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
         }
         .bestseller-card:hover {
           transform: translateY(-6px);
@@ -114,7 +118,7 @@ export default function BestSellers({ products }: { products: Product[] }) {
         }
         .bestseller-img-wrap {
           position: relative;
-          padding-top: 100%;
+          aspect-ratio: 1 / 1;
           background: #f8fafc;
           overflow: hidden;
         }

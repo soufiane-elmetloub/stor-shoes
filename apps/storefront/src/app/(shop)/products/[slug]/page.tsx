@@ -49,9 +49,99 @@ export default function ProductDetailPage() {
 
   if (loading) return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '2rem 1.5rem' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
-        <div className="skeleton" style={{ height: 500, borderRadius: '1rem' }} />
-        <div><div className="skeleton" style={{ height: 30, width: '60%', marginBottom: '1rem' }} /><div className="skeleton" style={{ height: 40, width: '30%' }} /></div>
+      <style>{`
+        .skeleton-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 3rem;
+          align-items: start;
+        }
+        .skeleton-image-wrapper {
+          display: flex;
+          gap: 0.75rem;
+        }
+        .skeleton-thumb-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          width: 64px;
+          flex-shrink: 0;
+        }
+        .skeleton-main-img {
+          flex: 1;
+          border-radius: 1rem;
+          aspect-ratio: 1 / 1;
+        }
+        .skeleton-details {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          width: 100%;
+          max-width: 400px;
+          margin-left: 6rem;
+        }
+        @media (max-width: 768px) {
+          .skeleton-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+          .skeleton-image-wrapper {
+            flex-direction: column-reverse;
+          }
+          .skeleton-thumb-list {
+            flex-direction: row;
+            width: 100%;
+            overflow-x: auto;
+          }
+          .skeleton-details {
+            margin-left: 0;
+            max-width: 100%;
+          }
+        }
+      `}</style>
+      {/* Breadcrumb skeleton */}
+      <div className="skeleton" style={{ height: 20, width: '30%', marginBottom: '2rem', borderRadius: '0.25rem' }} />
+      
+      <div className="skeleton-grid">
+        {/* Image skeleton */}
+        <div className="skeleton-image-wrapper">
+          <div className="skeleton-thumb-list">
+            <div className="skeleton" style={{ width: 64, height: 64, borderRadius: '0.5rem' }} />
+            <div className="skeleton" style={{ width: 64, height: 64, borderRadius: '0.5rem' }} />
+            <div className="skeleton" style={{ width: 64, height: 64, borderRadius: '0.5rem' }} />
+          </div>
+          <div className="skeleton skeleton-main-img" />
+        </div>
+        
+        {/* Details skeleton */}
+        <div className="skeleton-details">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="skeleton" style={{ height: 20, width: '30%', borderRadius: '0.25rem' }} />
+            <div className="skeleton" style={{ height: 40, width: '80%', borderRadius: '0.5rem' }} />
+            <div className="skeleton" style={{ height: 32, width: '40%', borderRadius: '0.5rem' }} />
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="skeleton" style={{ height: 20, width: '20%', borderRadius: '0.25rem' }} />
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <div className="skeleton" style={{ height: 40, width: 40, borderRadius: '50%' }} />
+              <div className="skeleton" style={{ height: 40, width: 40, borderRadius: '50%' }} />
+              <div className="skeleton" style={{ height: 40, width: 40, borderRadius: '50%' }} />
+            </div>
+          </div>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="skeleton" style={{ height: 20, width: '20%', borderRadius: '0.25rem' }} />
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+              <div className="skeleton" style={{ height: 40, width: 60, borderRadius: '0.5rem' }} />
+              <div className="skeleton" style={{ height: 40, width: 60, borderRadius: '0.5rem' }} />
+              <div className="skeleton" style={{ height: 40, width: 60, borderRadius: '0.5rem' }} />
+              <div className="skeleton" style={{ height: 40, width: 60, borderRadius: '0.5rem' }} />
+            </div>
+          </div>
+          
+          <div className="skeleton" style={{ height: 50, width: '100%', borderRadius: '2rem', marginTop: '1rem' }} />
+        </div>
       </div>
     </div>
   );

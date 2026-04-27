@@ -21,11 +21,12 @@ function ProductSkeleton({ index }: { index: number }) {
         border: '1px solid #f1f5f9',
         boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
         animationDelay: `${index * 100}ms`,
+        display: 'flex', flexDirection: 'column', height: '100%'
       }}
       className="skeleton-card"
     >
       {/* Image skeleton */}
-      <div style={{ position: 'relative', paddingTop: '100%', background: '#f8fafc', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', aspectRatio: '1/1', background: '#f8fafc', overflow: 'hidden' }}>
         <div 
           className="shimmer"
           style={{
@@ -52,15 +53,15 @@ function ProductSkeleton({ index }: { index: number }) {
       </div>
       
       {/* Content skeleton */}
-      <div style={{ padding: '1rem 1.25rem' }}>
+      <div style={{ padding: '1rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         {/* Brand */}
         <div 
           style={{ 
             width: '50px', 
-            height: '12px', 
+            height: '10px', 
             borderRadius: '4px', 
             background: '#e2e8f0',
-            marginBottom: '0.5rem',
+            marginBottom: '0.6rem',
           }}
           className="shimmer"
         />
@@ -82,13 +83,13 @@ function ProductSkeleton({ index }: { index: number }) {
             height: '18px', 
             borderRadius: '4px', 
             background: '#e2e8f0',
-            marginBottom: '0.75rem',
+            marginBottom: 'auto',
           }}
           className="shimmer"
         />
         
         {/* Price */}
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '0.75rem' }}>
           <div 
             style={{ 
               width: '70px', 

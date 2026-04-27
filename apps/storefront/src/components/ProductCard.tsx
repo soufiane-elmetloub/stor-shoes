@@ -71,6 +71,16 @@ export default function ProductCard({ product }: ProductCardProps) {
     <>
     <style>{`
       @media (max-width: 768px) {
+        .product-card-content-container {
+          padding: 1rem !important; /* Increase padding on mobile */
+        }
+        .product-card-brand-text {
+          font-size: 0.6rem !important;
+          font-weight: 500 !important; /* Lighter font weight */
+        }
+        .product-card-title-text {
+          margin-bottom: 1rem !important; /* More space before price */
+        }
         .product-card-price-row {
           gap: 0.25rem !important;
           flex-wrap: nowrap !important;
@@ -84,6 +94,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         }
       }
       @media (max-width: 380px) {
+        .product-card-content-container {
+          padding: 0.85rem !important;
+        }
         .product-card-price-current {
           font-size: 0.7rem !important;
         }
@@ -92,12 +105,13 @@ export default function ProductCard({ product }: ProductCardProps) {
         }
       }
     `}</style>
-    <Link href={`/products/${product.slug}`} style={{ textDecoration: 'none' }} aria-label={`View ${product.name} details`}>
+    <Link href={`/products/${product.slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }} aria-label={`View ${product.name} details`}>
       <article style={{
         background: 'white', borderRadius: '1rem', overflow: 'hidden',
         transition: 'all 0.3s ease', cursor: 'pointer',
         border: '1px solid #f1f5f9', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
         position: 'relative',
+        display: 'flex', flexDirection: 'column', height: '100%',
       }}>
         {/* Wishlist Button */}
         <button
@@ -152,14 +166,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
         </div>
-        <div style={{ padding: '1rem 1.25rem' }}>
+        <div className="product-card-content-container" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           {product.brand && (
-            <span aria-label={`Brand: ${product.brand}`} style={{ fontSize: '0.7rem', fontWeight: 600, color: '#1d4ed8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{product.brand}</span>
+            <span aria-label={`Brand: ${product.brand}`} className="product-card-brand-text" style={{ fontSize: '0.65rem', fontWeight: 600, color: '#1d4ed8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.35rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.brand}</span>
           )}
-          <h3 aria-label={`Product name: ${product.name}`} style={{ fontSize: '0.95rem', fontWeight: 600, color: '#0f172a', marginTop: '0.25rem', lineHeight: 1.4 }}>
+          <h3 aria-label={`Product name: ${product.name}`} className="product-card-title-text" style={{ 
+            fontSize: '0.85rem', fontWeight: 600, color: '#0f172a', margin: '0 0 0.75rem 0', lineHeight: 1.4,
+            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis'
+          }}>
             {product.name}
           </h3>
-          <div role="group" aria-label={`Price: ${Number(displayPrice).toLocaleString('en-US')} Moroccan Dirhams`} className="product-card-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.75rem', flexWrap: 'nowrap' }}>
+          <div role="group" aria-label={`Price: ${Number(displayPrice).toLocaleString('en-US')} Moroccan Dirhams`} className="product-card-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: 'auto', flexWrap: 'nowrap' }}>
             <span aria-label={`Current price ${Number(displayPrice).toLocaleString('en-US')} MAD`} className="product-card-price-current" style={{ fontSize: '1.15rem', fontWeight: 800, color: hasDiscount ? '#ef4444' : '#0f172a', whiteSpace: 'nowrap' }}>
               {Number(displayPrice).toLocaleString('en-US')} MAD
             </span>

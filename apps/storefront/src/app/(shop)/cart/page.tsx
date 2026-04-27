@@ -13,7 +13,7 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div style={{ padding: '5rem 1.5rem', textAlign: 'center', fontFamily: INTER }}>
+      <div style={{ padding: '5rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', fontFamily: INTER }}>
         <Image src="/icons/shopping-cart.png" alt="cart" width={64} height={64} style={{ opacity: 0.25, marginBottom: '1.5rem' }} unoptimized />
         <h1 style={{ fontSize: '1.4rem', fontWeight: 700, color: '#000', marginBottom: '0.6rem', fontFamily: PLAYFAIR }}>
           Votre panier est vide
