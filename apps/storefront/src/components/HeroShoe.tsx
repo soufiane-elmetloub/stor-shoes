@@ -69,6 +69,7 @@ export default function HeroShoe({ imageSrc }: { imageSrc?: string }) {
           width={500}
           height={500}
           priority
+          unoptimized
           className="hero-shoe-img"
           style={{
             ...style,

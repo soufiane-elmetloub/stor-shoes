@@ -180,7 +180,7 @@ export const systemApi = {
 // Helper for generating full image URLs
 export const getImageUrl = (path?: string) => {
   if (!path) return '';
-  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:') || path.startsWith('blob:')) return path;
   
   // Clean up API URL to point to backend root
   return `${API_BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`;

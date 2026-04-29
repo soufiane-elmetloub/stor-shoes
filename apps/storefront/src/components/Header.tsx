@@ -153,6 +153,9 @@ export default function Header() {
 
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
+          .header-logo-img {
+            max-height: 40px !important;
+          }
           .mobile-menu-btn {
             display: flex;
             align-items: center;
@@ -212,16 +215,30 @@ export default function Header() {
           </div>
 
           {/* Logo - Centered (always absolute center) */}
-          <div style={{
+          <div className="header-logo-container" style={{
             position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-            display: 'flex', alignItems: 'center',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
             visibility: searchOpen ? 'hidden' : 'visible',
             opacity: searchOpen ? 0 : 1,
             transition: 'opacity 0.15s',
-            zIndex: 10 /* lower than right icons so it doesn't block clicks */
+            zIndex: 10, /* lower than right icons so it doesn't block clicks */
+            height: '100%',
+            padding: '0.25rem 0'
           }}>
-            <Link href="/" aria-label="StorShoes Home" style={{ display: 'flex', alignItems: 'center' }}>
-              <Image src="/logoe2.jpeg" alt="StorShoes" width={90} height={45} style={{ objectFit: 'contain' }} priority />
+            <Link href="/" aria-label="StorShoes Home" style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+              <Image 
+                src="/logoe2.jpeg" 
+                alt="StorShoes" 
+                width={90} 
+                height={45} 
+                className="header-logo-img"
+                style={{ 
+                  objectFit: 'contain', 
+                  width: 'auto', 
+                  maxHeight: '100%' 
+                }} 
+                priority 
+              />
             </Link>
           </div>
 

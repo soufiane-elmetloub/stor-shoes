@@ -5,7 +5,7 @@ const REQUEST_TIMEOUT = 30000; // 30 seconds
 
 export const getImageUrl = (url: string) => {
   if (!url) return '';
-  if (url.startsWith('http')) return url;
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:') || url.startsWith('blob:')) return url;
   const baseUrl = API_URL.replace(/\/api$/, '');
   return `${baseUrl}${url.startsWith('/') ? '' : '/'}${url}`;
 };

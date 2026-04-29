@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL, API_STATUS_EVENT, systemApi } from '../services/api';
+import Header from './Header';
 import {
   LayoutDashboard, Package, ShoppingCart, Warehouse,
   FolderOpen, BarChart3, TrendingUp, Mail, Palette, LogOut,
@@ -72,7 +73,7 @@ export default function Layout() {
   }, []);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div className={isCollapsed ? 'sidebar-collapsed' : ''} style={{ display: 'flex', minHeight: '100vh' }}>
       {/* Sidebar */}
       <aside className="sidebar" style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: isCollapsed ? '80px' : '260px', transition: 'width 0.3s ease', overflowX: 'hidden' }}>
         <div className="sidebar-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: isCollapsed ? 'center' : 'space-between', padding: isCollapsed ? '1.5rem 0' : '0 1.5rem 1.5rem' }}>
@@ -129,24 +130,27 @@ export default function Layout() {
       </aside>
 
       {/* Main Content */}
-      <main className="main-content" style={{ marginLeft: isCollapsed ? '80px' : '260px', transition: 'margin-left 0.3s ease' }}>
-        {!apiOnline && (
-          <div
-            style={{
-              marginBottom: '1rem',
-              background: '#fef2f2',
-              color: '#991b1b',
-              border: '1px solid #fecaca',
-              borderRadius: '0.75rem',
-              padding: '0.75rem 1rem',
-              fontSize: '0.85rem',
-              fontWeight: 500,
-            }}
-          >
-            الخادم غير متصل حالياً ({API_BASE_URL}). شغّل خدمة الـ API ثم أعد المحاولة.
-          </div>
-        )}
-        <Outlet />
+      <main className="main-content" style={{ transition: 'margin-left 0.3s ease' }}>
+        <Header />
+        <div className="main-content-inner">
+          {!apiOnline && (
+            <div
+              style={{
+                marginBottom: '1rem',
+                background: '#fef2f2',
+                color: '#991b1b',
+                border: '1px solid #fecaca',
+                borderRadius: '0.75rem',
+                padding: '0.75rem 1rem',
+                fontSize: '0.85rem',
+                fontWeight: 500,
+              }}
+            >
+              الخادم غير متصل حالياً ({API_BASE_URL}). شغّل خدمة الـ API ثم أعد المحاولة.
+            </div>
+          )}
+          <Outlet />
+        </div>
       </main>
     </div>
   );

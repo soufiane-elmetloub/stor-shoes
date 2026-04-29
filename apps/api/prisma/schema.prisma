@@ -73,6 +73,8 @@ model ProductVariant {
   size       String
   color      String?
   colorHex   String?     @map("color_hex")
+  imageUrl   String?     @map("image_url")
+  imageUrls  String[]    @default([]) @map("image_urls")
   sku        String      @unique
   stock      Int         @default(0)
   isActive   Boolean     @default(true) @map("is_active")

@@ -9,25 +9,46 @@ export class AnalyticsService {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
+    const previousStartDate = new Date(startDate);
+    previousStartDate.setDate(previousStartDate.getDate() - days);
+
     const [
-      totalVisits,
-      uniqueVisitors,
-      totalConversions,
+      currentVisits,
+      previousVisits,
+      currentUnique,
+      previousUnique,
+      currentConversions,
+      previousConversions,
       todayVisits,
+      yesterdayVisits,
     ] = await Promise.all([
-      // Total visits in period
+      // Current period visits
       this.prisma.visit.count({
         where: { createdAt: { gte: startDate } },
       }),
-      // Unique visitors (by sessionId)
+      // Previous period visits
+      this.prisma.visit.count({
+        where: { createdAt: { gte: previousStartDate, lt: startDate } },
+      }),
+      // Current period unique visitors
       this.prisma.visit.groupBy({
         by: ['sessionId'],
         where: { createdAt: { gte: startDate } },
         _count: { sessionId: true },
       }).then(result => result.length),
-      // Total conversions in period
+      // Previous period unique visitors
+      this.prisma.visit.groupBy({
+        by: ['sessionId'],
+        where: { createdAt: { gte: previousStartDate, lt: startDate } },
+        _count: { sessionId: true },
+      }).then(result => result.length),
+      // Current period conversions
       this.prisma.conversion.count({
         where: { createdAt: { gte: startDate } },
+      }),
+      // Previous period conversions
+      this.prisma.conversion.count({
+        where: { createdAt: { gte: previousStartDate, lt: startDate } },
       }),
       // Today's visits
       this.prisma.visit.count({
@@ -37,16 +58,36 @@ export class AnalyticsService {
           },
         },
       }),
+      // Yesterday's visits
+      this.prisma.visit.count({
+        where: {
+          createdAt: {
+            gte: new Date(new Date().setHours(-24, 0, 0, 0)),
+            lt: new Date(new Date().setHours(0, 0, 0, 0)),
+          },
+        },
+      }),
     ]);
 
-    const conversionRate = totalVisits > 0 ? (totalConversions / totalVisits) * 100 : 0;
+    const currentConvRate = currentVisits > 0 ? (currentConversions / currentVisits) * 100 : 0;
+    const previousConvRate = previousVisits > 0 ? (previousConversions / previousVisits) * 100 : 0;
+
+    const calculateChange = (current: number, previous: number) => {
+      if (previous === 0) return current > 0 ? 100 : 0;
+      return ((current - previous) / previous) * 100;
+    };
 
     return {
-      totalVisits,
-      uniqueVisitors,
+      totalVisits: currentVisits,
+      visitsChange: parseFloat(calculateChange(currentVisits, previousVisits).toFixed(1)),
+      uniqueVisitors: currentUnique,
+      uniqueChange: parseFloat(calculateChange(currentUnique, previousUnique).toFixed(1)),
       todayVisits,
-      conversionRate: parseFloat(conversionRate.toFixed(2)),
-      totalConversions,
+      todayChange: parseFloat(calculateChange(todayVisits, yesterdayVisits).toFixed(1)),
+      conversionRate: parseFloat(currentConvRate.toFixed(2)),
+      conversionRateChange: parseFloat((currentConvRate - previousConvRate).toFixed(2)),
+      totalConversions: currentConversions,
+      conversionsChange: parseFloat(calculateChange(currentConversions, previousConversions).toFixed(1)),
     };
   }
 

@@ -136,7 +136,9 @@ export class ReportsService {
       .sort((a, b) => b.amount - a.amount);
 
     // Daily sales for chart
-    const dailySales = await this.getDailySales(dateFrom, dateTo);
+    const startDay = new Date(dateFrom.getFullYear(), dateFrom.getMonth(), dateFrom.getDate());
+    const endDay = new Date(dateTo.getFullYear(), dateTo.getMonth(), dateTo.getDate());
+    const dailySales = this.getDailySales(orders, startDay, endDay);
 
     return {
       totalRevenue,
@@ -150,51 +152,50 @@ export class ReportsService {
     };
   }
 
-  private async getDailySales(dateFrom: Date, dateTo: Date) {
-    const days = Math.ceil((dateTo.getTime() - dateFrom.getTime()) / (24 * 60 * 60 * 1000));
+  private getDailySales(orders: any[], startDay: Date, endDay: Date) {
+    const days = Math.round((endDay.getTime() - startDay.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+    
     const result: { date: string; revenue: number; orders: number }[] = [];
+    const salesMap = new Map<string, { revenue: number; orders: number }>();
+    
+    for (const order of orders) {
+      const orderDate = new Date(order.createdAt);
+      const dateKey = `${orderDate.getFullYear()}-${String(orderDate.getMonth() + 1).padStart(2, '0')}-${String(orderDate.getDate()).padStart(2, '0')}`;
+      const current = salesMap.get(dateKey) || { revenue: 0, orders: 0 };
+      current.revenue += Number(order.total);
+      current.orders += 1;
+      salesMap.set(dateKey, current);
+    }
 
     for (let i = 0; i < days; i++) {
-      const date = new Date(dateFrom);
-      date.setDate(date.getDate() + i);
-      const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      const dayEnd = new Date(dayStart);
-      dayEnd.setDate(dayEnd.getDate() + 1);
-
-      const dayOrders = await this.prisma.order.findMany({
-        where: { createdAt: { gte: dayStart, lt: dayEnd }, status: { not: 'CANCELLED' } },
-        select: { total: true },
-      });
+      const dayStart = new Date(startDay);
+      dayStart.setDate(startDay.getDate() + i);
+      
+      const dateKey = `${dayStart.getFullYear()}-${String(dayStart.getMonth() + 1).padStart(2, '0')}-${String(dayStart.getDate()).padStart(2, '0')}`;
+      const stats = salesMap.get(dateKey) || { revenue: 0, orders: 0 };
 
       result.push({
-        date: dayStart.toISOString().split('T')[0],
-        revenue: dayOrders.reduce((s, o) => s + Number(o.total), 0),
-        orders: dayOrders.length,
+        date: dateKey,
+        revenue: stats.revenue,
+        orders: stats.orders,
       });
     }
     return result;
   }
 
   private async getSalesChart(days: number) {
-    const result: { date: string; revenue: number; orders: number }[] = [];
-    for (let i = days - 1; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      const dayEnd = new Date(dayStart);
-      dayEnd.setDate(dayEnd.getDate() + 1);
+    const endDay = new Date();
+    const startDay = new Date();
+    startDay.setDate(startDay.getDate() - days + 1);
 
-      const dayOrders = await this.prisma.order.findMany({
-        where: { createdAt: { gte: dayStart, lt: dayEnd }, status: { not: 'CANCELLED' } },
-        select: { total: true },
-      });
+    const orders = await this.prisma.order.findMany({
+      where: {
+        createdAt: { gte: startDay },
+        status: { not: 'CANCELLED' },
+      },
+      select: { createdAt: true, total: true },
+    });
 
-      result.push({
-        date: dayStart.toISOString().split('T')[0],
-        revenue: dayOrders.reduce((s, o) => s + Number(o.total), 0),
-        orders: dayOrders.length,
-      });
-    }
-    return result;
+    return this.getDailySales(orders, startDay, endDay);
   }
 }

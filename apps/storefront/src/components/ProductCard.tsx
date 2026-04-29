@@ -70,7 +70,15 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <>
     <style>{`
+      .badge-responsive {
+        font-size: 12px !important;
+        padding: 0.3rem 0.75rem !important;
+      }
       @media (max-width: 768px) {
+        .badge-responsive {
+          font-size: 10px !important;
+          padding: 0.25rem 0.6rem !important;
+        }
         .product-card-content-container {
           padding: 1rem !important; /* Increase padding on mobile */
         }
@@ -151,20 +159,20 @@ export default function ProductCard({ product }: ProductCardProps) {
               className="object-cover transition-transform duration-500 hover:scale-105"
               loading="lazy"
               decoding="async"
+              unoptimized
             />
           )}
-          <ul aria-label="Product badges" style={{ position: 'absolute', top: '0.75rem', left: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', margin: 0, padding: 0 }}>
-            {hasDiscount && (
-              <li style={{ background: '#b91c1c', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700 }}>
+          <ul aria-label="Product badges" style={{ position: 'absolute', top: '0.75rem', left: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', margin: 0, padding: 0, zIndex: 5 }}>
+            {totalStock === 0 ? (
+              <li style={{ background: '#111827', color: 'white', borderRadius: '9999px', fontWeight: 700 }} className="badge-responsive">
+                Épuisé
+              </li>
+            ) : hasDiscount ? (
+              <li style={{ background: '#ef4444', color: 'white', borderRadius: '9999px', fontWeight: 700 }} className="badge-responsive">
                 Promotion
               </li>
-            )}
+            ) : null}
           </ul>
-          {totalStock === 0 && (
-            <div role="status" aria-label="Out of stock" style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ background: 'white', color: '#ef4444', padding: '0.5rem 1.5rem', borderRadius: '9999px', fontWeight: 700, fontSize: '0.875rem' }}>Out of Stock</span>
-            </div>
-          )}
         </div>
         <div className="product-card-content-container" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           {product.brand && (

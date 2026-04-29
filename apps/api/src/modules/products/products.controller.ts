@@ -104,7 +104,7 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'إضافة متغير (مقاس/لون)' })
-  addVariant(@Param('id') id: string, @Body() data: { size: string; color?: string; colorHex?: string; sku: string; stock: number }) {
+  addVariant(@Param('id') id: string, @Body() data: { size: string; color?: string; colorHex?: string; imageUrl?: string; imageUrls?: string[]; sku: string; stock: number }) {
     return this.productsService.addVariant(id, data);
   }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import ProductCard from '@/components/ProductCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { trackProductView } from '@/components/AnalyticsTracker';
 import { getImageUrl } from '@/lib/api';
-import type { Product, ProductVariant, ProductImage } from '@/types';
+import type { Product, ProductVariant } from '@/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
@@ -46,6 +46,40 @@ export default function ProductDetailPage() {
       }).catch(() => {}).finally(() => setLoading(false));
     }
   }, [slug]);
+
+  // Derived non-hook values (safe before early returns because no hooks used)
+  const variants = Array.isArray(product?.variants) ? (product!.variants as ProductVariant[]) : [];
+
+  const activeImages = useMemo(() => {
+    if (!product) return [];
+    if (selectedColor) {
+      const variantWithImages = variants.find((v: any) => v.color === selectedColor && (v.imageUrls?.length > 0 || v.imageUrl));
+      if (variantWithImages) {
+        const urls = (variantWithImages as any).imageUrls?.length > 0 ? (variantWithImages as any).imageUrls : [(variantWithImages as any).imageUrl];
+        return (urls as string[]).map((url: string) => ({ url }));
+      }
+    }
+    return product.images || [];
+  }, [selectedColor, variants, product]);
+
+  const [isFading, setIsFading] = useState(false);
+  const [currentMainImageUrl, setCurrentMainImageUrl] = useState('');
+
+  useEffect(() => {
+    const newImageUrl = getImageUrl(activeImages[selectedImage]?.url || activeImages[0]?.url || '');
+    if (newImageUrl !== currentMainImageUrl) {
+      setIsFading(true);
+      const timer = setTimeout(() => {
+        setCurrentMainImageUrl(newImageUrl);
+        setIsFading(false);
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedImage, activeImages, currentMainImageUrl]);
+
+  useEffect(() => {
+    setSelectedImage(0);
+  }, [selectedColor]);
 
   if (loading) return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '2rem 1.5rem' }}>
@@ -146,14 +180,13 @@ export default function ProductDetailPage() {
     </div>
   );
 
-  if (!product) return <div style={{ textAlign: 'center', padding: '4rem', color: '#94a3b8' }}><h1>Product not found</h1><Link href="/products" style={{ color: '#3b82f6' }}>Back to Products</Link></div>;
+  const uniqueColors = [...new Map(variants.map((v: any) => [v.color, v])).values()] as any[];
+  const uniqueSizes = [...new Set(variants.filter((v: any) => !selectedColor || v.color === selectedColor).map((v: any) => v.size))] as string[];
+  const selectedVariant = variants.find((v: any) => v.size === selectedSize && (!selectedColor || v.color === selectedColor));
+  const hasDiscount = product?.salePrice && product.salePrice < product.price;
+  const totalStock = variants.reduce((acc, v) => acc + v.stock, 0);
 
-  const variants = Array.isArray(product.variants) ? product.variants : [];
-  const selectedMainImageUrl = getImageUrl(product.images?.[selectedImage]?.url || product.images?.[0]?.url || '');
-  const uniqueColors = [...new Map(variants.map((v: ProductVariant) => [v.color, v])).values()] as ProductVariant[];
-  const uniqueSizes = [...new Set(variants.filter((v: ProductVariant) => !selectedColor || v.color === selectedColor).map((v: ProductVariant) => v.size))] as string[];
-  const selectedVariant = variants.find((v: ProductVariant) => v.size === selectedSize && (!selectedColor || v.color === selectedColor));
-  const hasDiscount = product.salePrice && product.salePrice < product.price;
+  if (!product) return <div style={{ textAlign: 'center', padding: '4rem', color: '#94a3b8' }}><h1>Product not found</h1><Link href="/products" style={{ color: '#3b82f6' }}>Back to Products</Link></div>;
 
   const handleAddToCart = () => {
     if (!selectedVariant || !selectedVariant.id) return;
@@ -264,9 +297,9 @@ export default function ProductDetailPage() {
         <div className="gallery-container">
 
           {/* Vertical thumbnails */}
-          {product.images?.length > 1 && (
+          {activeImages.length > 1 && (
             <div className="thumb-list">
-              {product.images.map((img: ProductImage, i: number) => (
+              {activeImages.map((img: any, i: number) => (
                 <button key={i} onClick={() => setSelectedImage(i)}
                   aria-label={`Select product image ${i + 1}`}
                   style={{
@@ -284,6 +317,7 @@ export default function ProductDetailPage() {
                     height={64}
                     sizes="64px"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    unoptimized
                   />
                 </button>
               ))}
@@ -293,9 +327,9 @@ export default function ProductDetailPage() {
           {/* Main image */}
           <div style={{ flex: 1, position: 'relative' }}>
             {/* Prev / Next arrows */}
-            {product.images?.length > 1 && (
+            {activeImages.length > 1 && (
               <>
-                <button onClick={() => setSelectedImage(i => (i - 1 + product.images.length) % product.images.length)}
+                <button onClick={() => setSelectedImage(i => (i - 1 + activeImages.length) % activeImages.length)}
                   aria-label="Show previous product image"
                   style={{
                     position: 'absolute', top: '50%', left: 8, transform: 'translateY(-50%)',
@@ -307,7 +341,7 @@ export default function ProductDetailPage() {
                   }}>
                   ‹
                 </button>
-                <button onClick={() => setSelectedImage(i => (i + 1) % product.images.length)}
+                <button onClick={() => setSelectedImage(i => (i + 1) % activeImages.length)}
                   aria-label="Show next product image"
                   style={{
                     position: 'absolute', top: '50%', right: 8, transform: 'translateY(-50%)',
@@ -324,18 +358,29 @@ export default function ProductDetailPage() {
 
             {/* Main image container */}
             <div style={{ borderRadius: '1rem', overflow: 'hidden', background: '#f8fafc', position: 'relative', paddingTop: '100%', cursor: 'zoom-in' }}>
-              {selectedMainImageUrl ? (
+              <ul aria-label="Product badges" style={{ position: 'absolute', top: '1rem', left: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', listStyle: 'none', margin: 0, padding: 0, zIndex: 10 }}>
+                {totalStock === 0 ? (
+                  <li style={{ background: '#111827', color: 'white', padding: '0.3rem 0.75rem', borderRadius: '9999px', fontSize: '12px', fontWeight: 700 }} className="product-detail-price-badge">
+                    Épuisé
+                  </li>
+                ) : hasDiscount ? (
+                  <li style={{ background: '#ef4444', color: 'white', padding: '0.3rem 0.75rem', borderRadius: '9999px', fontSize: '12px', fontWeight: 700 }} className="product-detail-price-badge">
+                    Promotion
+                  </li>
+                ) : null}
+              </ul>
+              {currentMainImageUrl ? (
                 <Image
-                  key={selectedImage}
-                  src={selectedMainImageUrl}
+                  src={currentMainImageUrl}
                   alt={product.name}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  preload
                   decoding="async"
+                  unoptimized
                   style={{
                     position: 'absolute', inset: 0, width: '100%', height: '100%',
-                    objectFit: 'cover', transition: 'transform 0.4s ease, opacity 0.3s ease',
+                    objectFit: 'cover', transition: 'opacity 0.15s ease-in-out',
+                    opacity: isFading ? 0.5 : 1
                   }}
                 />
               ) : (
@@ -355,9 +400,9 @@ export default function ProductDetailPage() {
                 </div>
               )}
               {/* Dot indicators */}
-              {product.images?.length > 1 && (
+              {activeImages.length > 1 && (
                 <div style={{ position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '0.35rem' }}>
-                  {product.images.map((_: ProductImage, i: number) => (
+                  {activeImages.map((_: any, i: number) => (
                     <button key={i} onClick={() => setSelectedImage(i)}
                       aria-label={`Go to image ${i + 1}`}
                       style={{
@@ -383,23 +428,27 @@ export default function ProductDetailPage() {
             <span className="product-detail-price-current" style={{ fontSize: '1.4rem', fontWeight: 300, color: '#000000', fontFamily: "'Inter', system-ui, sans-serif", letterSpacing: '0.01em', whiteSpace: 'nowrap' }}>
               {Number(product.salePrice || product.price).toLocaleString('en-US')} MAD
             </span>
-            {hasDiscount && (
+            {totalStock === 0 ? (
+              <span className="product-detail-price-badge" style={{ background: '#111827', color: '#ffffff', padding: '0.1rem 0.5rem', borderRadius: '0.375rem', fontSize: '0.72rem', fontWeight: 600, fontFamily: "'Inter', system-ui, sans-serif", whiteSpace: 'nowrap' }}>
+                Épuisé
+              </span>
+            ) : hasDiscount ? (
               <>
                 <span className="product-detail-price-original" style={{ fontSize: '0.85rem', color: '#475569', textDecoration: 'line-through', fontFamily: "'Inter', system-ui, sans-serif", fontWeight: 300, whiteSpace: 'nowrap' }}>{Number(product.price).toLocaleString('en-US')} MAD</span>
                 <span className="product-detail-price-badge" style={{ background: '#b91c1c', color: '#ffffff', padding: '0.1rem 0.5rem', borderRadius: '0.375rem', fontSize: '0.72rem', fontWeight: 600, fontFamily: "'Inter', system-ui, sans-serif", whiteSpace: 'nowrap' }}>
                   Promotion
                 </span>
               </>
-            )}
+            ) : null}
           </div>
 
-          {uniqueColors.length > 0 && uniqueColors.some((v: ProductVariant) => v.color && v.color.trim() !== '') && (
+          {uniqueColors.length > 0 && uniqueColors.some((v: any) => v.color && v.color.trim() !== '') && (
             <div style={{ marginTop: '1rem' }}>
               <label style={{ fontWeight: 600, fontSize: '0.72rem', marginBottom: '0.4rem', display: 'block', color: '#000000', fontFamily: "'Inter', system-ui, sans-serif", textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                 Color: <span style={{ fontWeight: 400, textTransform: 'none' }}>{selectedColor}</span>
               </label>
               <div style={{ display: 'flex', gap: '0.4rem' }}>
-                {uniqueColors.filter((v: ProductVariant) => v.color && v.color.trim() !== '').map((v: ProductVariant) => (
+                {uniqueColors.filter((v: any) => v.color && v.color.trim() !== '').map((v: any) => (
                   <button key={v.color} onClick={() => setSelectedColor(v.color || '')}
                     style={{ width: 44, height: 44, borderRadius: '50%', background: v.colorHex || '#ccc',
                       border: selectedColor === v.color ? '2px solid #000000' : '1.5px solid #d1d5db',
@@ -413,30 +462,39 @@ export default function ProductDetailPage() {
           <div style={{ marginTop: '1rem' }}>
             <label style={{ fontWeight: 600, fontSize: '0.72rem', marginBottom: '0.4rem', display: 'block', color: '#000000', fontFamily: "'Inter', system-ui, sans-serif", textTransform: 'uppercase', letterSpacing: '0.08em' }}>Size</label>
             <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-              {uniqueSizes.map((size) => {
-                const variant = variants.find((v: ProductVariant) => v.size === size && (!selectedColor || v.color === selectedColor));
-                const inStock = variant && variant.stock > 0;
-                const isSelected = selectedSize === size;
-                return (
-                  <button key={size} onClick={() => inStock && setSelectedSize(size)}
-                    style={{
-                      minWidth: 44, minHeight: 44, padding: '0 1rem',
-                      borderRadius: '1.0rem',
-                      border: isSelected ? '1.5px solid #000000' : '1px solid #000000',
-                      cursor: inStock ? 'pointer' : 'not-allowed',
-                      background: isSelected ? '#000000' : (!inStock ? 'linear-gradient(to top right, transparent calc(50% - 1px), #a1a1aa, transparent calc(50% + 1px))' : 'transparent'),
-                      color: isSelected ? '#ffffff' : inStock ? '#000000' : '#a1a1aa',
-                      fontWeight: 600, fontSize: '0.78rem',
-                      fontFamily: "'Inter', system-ui, sans-serif",
-                      textDecoration: 'none',
-                      position: 'relative',
-                      opacity: inStock ? 1 : 0.6,
-                      transition: 'all 0.2s ease',
-                    }}>
-                    {size}
-                  </button>
-                );
-              })}
+            {uniqueSizes.map((size) => {
+              const variant = variants.find((v: any) => v.size === size && (!selectedColor || v.color === selectedColor));
+              const inStock = variant && variant.stock > 0;
+              const isSelected = selectedSize === size;
+              return (
+                <button key={size} onClick={() => inStock && setSelectedSize(size)}
+                  style={{
+                    minWidth: 44, minHeight: 44, padding: '0 1rem',
+                    borderRadius: '1.0rem',
+                    border: isSelected ? '1.5px solid #000000' : (!inStock ? '1px solid #cbd5e1' : '1px solid #000000'),
+                    cursor: inStock ? 'pointer' : 'not-allowed',
+                    background: isSelected ? '#000000' : (!inStock ? '#f8fafc' : 'transparent'),
+                    color: isSelected ? '#ffffff' : inStock ? '#000000' : '#94a3b8',
+                    fontWeight: 600, fontSize: '0.78rem',
+                    fontFamily: "'Inter', system-ui, sans-serif",
+                    textDecoration: 'none',
+                    position: 'relative',
+                    opacity: inStock ? 1 : 0.6,
+                    transition: 'all 0.2s ease',
+                    overflow: 'hidden',
+                  }}>
+                  {size}
+                  {!inStock && (
+                    <span style={{
+                      position: 'absolute', top: '50%', left: '50%',
+                      width: '150%', height: '1.5px', background: '#64748b',
+                      transform: 'translate(-50%, -50%) rotate(-35deg)',
+                      pointerEvents: 'none'
+                    }} />
+                  )}
+                </button>
+              );
+            })}
             </div>
             {variants.length === 0 && (
               <p style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: '#94a3b8' }}>
@@ -480,14 +538,13 @@ export default function ProductDetailPage() {
             <button onClick={handleAddToCart} disabled={!selectedVariant || selectedVariant.stock === 0}
               aria-label="Ajouter au panier"
               style={{
-                width: '100%', minHeight: 44, borderRadius: '0.5rem', border: '1.5px solid #000000', cursor: 'pointer',
-                background: '#000000', color: '#ffffff', fontWeight: 600, fontSize: '0.75rem',
+                width: '100%', minHeight: 44, borderRadius: '0.5rem', border: '1.5px solid #000000', cursor: (!selectedVariant || selectedVariant.stock === 0) ? 'not-allowed' : 'pointer',
+                background: (!selectedVariant || selectedVariant.stock === 0) ? '#e2e8f0' : '#000000', color: (!selectedVariant || selectedVariant.stock === 0) ? '#94a3b8' : '#ffffff', fontWeight: 600, fontSize: '0.75rem',
                 fontFamily: "'Inter', system-ui, sans-serif",
                 letterSpacing: '0.06em', textTransform: 'uppercase',
-                opacity: (!selectedVariant || selectedVariant.stock === 0) ? 0.5 : 1,
                 transition: 'all 0.3s ease',
               }}>
-              {addedToCart ? '✓ Ajouté au panier' : 'Ajouter au panier'}
+              {(!selectedVariant || selectedVariant.stock === 0) ? 'Épuisé' : addedToCart ? '✓ Ajouté au panier' : 'Ajouter au panier'}
             </button>
             <button
               disabled={!selectedVariant || selectedVariant.stock === 0}
@@ -507,15 +564,15 @@ export default function ProductDetailPage() {
                 router.push(`/commande?${params.toString()}`);
               }}
               style={{
-                width: '100%', minHeight: 44, borderRadius: '0.5rem', border: '1.5px solid #000000', cursor: 'pointer',
-                background: 'transparent', color: '#000000', fontWeight: 600, fontSize: '0.75rem',
+                width: '100%', minHeight: 44, borderRadius: '0.5rem', border: '1.5px solid #000000', cursor: (!selectedVariant || selectedVariant.stock === 0) ? 'not-allowed' : 'pointer',
+                background: 'transparent', color: (!selectedVariant || selectedVariant.stock === 0) ? '#94a3b8' : '#000000', fontWeight: 600, fontSize: '0.75rem',
                 fontFamily: "'Inter', system-ui, sans-serif",
                 letterSpacing: '0.06em', textTransform: 'uppercase',
-                opacity: (!selectedVariant || selectedVariant.stock === 0) ? 0.5 : 1,
+                borderColor: (!selectedVariant || selectedVariant.stock === 0) ? '#cbd5e1' : '#000000',
                 transition: 'all 0.3s ease',
               }}>
               <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem' }}>
-                <Image src="/icons/shopping-cart.png" alt="" width={13} height={13} style={{ transition: 'filter 0.3s ease' }} unoptimized />
+                <Image src="/icons/shopping-cart.png" alt="" width={13} height={13} style={{ transition: 'filter 0.3s ease', opacity: (!selectedVariant || selectedVariant.stock === 0) ? 0.5 : 1 }} unoptimized />
                 Achetez avec paiement à la livraison
               </span>
             </button>
@@ -527,7 +584,7 @@ export default function ProductDetailPage() {
         <div style={{ marginTop: '4rem' }}>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem' }}>Related Products</h2>
           <div className="product-grid-container">
-            {relatedProducts.map((p) => <ProductCard key={p.id} product={p} />)}
+            {relatedProducts.map((p) => <ProductCard key={p.id} product={p as any} />)}
           </div>
         </div>
       )}

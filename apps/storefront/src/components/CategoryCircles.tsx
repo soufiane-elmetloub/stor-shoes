@@ -38,6 +38,7 @@ export default function CategoryCircles({ categories }: { categories: Category[]
                 alt={cat.name}
                 className="cat-image"
                 loading="lazy"
+                decoding="async"
                 onError={(e) => {
                   const target = e.currentTarget;
                   const fallback = CATEGORY_IMAGES[cat.slug] || CATEGORY_IMAGES.sneakers;

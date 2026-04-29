@@ -5,15 +5,20 @@ import {
   Calendar, Download, Target, Percent
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { analyticsApi } from '../services/api';
+import { analyticsApi, getImageUrl } from '../services/api';
 
 // Real data from API
 interface VisitStats {
   totalVisits: number;
+  visitsChange: number;
   uniqueVisitors: number;
+  uniqueChange: number;
   todayVisits: number;
+  todayChange: number;
   conversionRate: number;
+  conversionRateChange: number;
   totalConversions: number;
+  conversionsChange: number;
 }
 
 interface UTMData {
@@ -40,10 +45,15 @@ export default function AnalyticsPage() {
   // Real data states from API
   const [stats, setStats] = useState<VisitStats>({
     totalVisits: 0,
+    visitsChange: 0,
     uniqueVisitors: 0,
+    uniqueChange: 0,
     todayVisits: 0,
+    todayChange: 0,
     conversionRate: 0,
+    conversionRateChange: 0,
     totalConversions: 0,
+    conversionsChange: 0,
   });
 
   const [utmSources, setUtmSources] = useState<UTMData[]>([]);
@@ -133,40 +143,40 @@ export default function AnalyticsPage() {
           icon={Eye}
           label="إجمالي الزيارات"
           value={stats.totalVisits.toLocaleString()}
-          change="+12.5%"
-          positive
+          change={`${stats.visitsChange > 0 ? '+' : ''}${stats.visitsChange}%`}
+          positive={stats.visitsChange >= 0}
           color="#3b82f6"
         />
         <StatCard
           icon={MousePointer}
           label="زوار فريدون"
           value={stats.uniqueVisitors.toLocaleString()}
-          change="+8.3%"
-          positive
+          change={`${stats.uniqueChange > 0 ? '+' : ''}${stats.uniqueChange}%`}
+          positive={stats.uniqueChange >= 0}
           color="#8b5cf6"
         />
         <StatCard
           icon={ShoppingCart}
           label="التحويلات الكلية"
           value={stats.totalConversions.toLocaleString()}
-          change="+15.2%"
-          positive
+          change={`${stats.conversionsChange > 0 ? '+' : ''}${stats.conversionsChange}%`}
+          positive={stats.conversionsChange >= 0}
           color="#10b981"
         />
         <StatCard
           icon={Percent}
           label="معدل التحويل"
           value={`${stats.conversionRate}%`}
-          change="-0.4%"
-          positive={false}
+          change={`${stats.conversionRateChange > 0 ? '+' : ''}${stats.conversionRateChange}%`}
+          positive={stats.conversionRateChange >= 0}
           color="#f59e0b"
         />
         <StatCard
           icon={Calendar}
           label="زيارات اليوم"
-          value={stats.todayVisits.toString()}
-          change="+5.1%"
-          positive
+          value={stats.todayVisits.toLocaleString()}
+          change={`${stats.todayChange > 0 ? '+' : ''}${stats.todayChange}%`}
+          positive={stats.todayChange >= 0}
           color="#ef4444"
         />
       </div>
@@ -335,8 +345,17 @@ export default function AnalyticsPage() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       flexShrink: 0,
+                      overflow: 'hidden',
                     }}>
-                      <Package size={24} color="#94a3b8" />
+                      {product.image ? (
+                        <img 
+                          src={getImageUrl(product.image)} 
+                          alt={product.productName} 
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                        />
+                      ) : (
+                        <Package size={24} color="#94a3b8" />
+                      )}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: '#1e293b', marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

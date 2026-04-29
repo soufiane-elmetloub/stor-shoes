@@ -11,6 +11,8 @@ class CreateVariantDto {
   @ApiProperty() @IsString() size: string;
   @ApiPropertyOptional() @IsOptional() @IsString() color?: string;
   @ApiPropertyOptional() @IsOptional() @IsString() colorHex?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() imageUrl?: string;
+  @ApiPropertyOptional() @IsOptional() @IsArray() @IsString({ each: true }) imageUrls?: string[];
   @ApiProperty() @IsString() sku: string;
   @ApiProperty() @IsNumber() @Min(0) stock: number;
 }

@@ -156,7 +156,19 @@ export class ProductsService {
           ? { createMany: { data: dto.images.map((img, i) => ({ url: img.url, alt: img.alt, order: i })) } }
           : undefined,
         variants: dto.variants?.length
-          ? { createMany: { data: dto.variants } }
+          ? { 
+              createMany: { 
+                data: dto.variants.map(v => ({
+                  size: v.size,
+                  color: v.color ?? null,
+                  colorHex: v.colorHex ?? null,
+                  imageUrl: v.imageUrl ?? null,
+                  imageUrls: v.imageUrls ?? [],
+                  sku: v.sku,
+                  stock: v.stock
+                }))
+              } 
+            }
           : undefined,
       },
       include: {
@@ -234,7 +246,7 @@ export class ProductsService {
     return this.prisma.productImage.delete({ where: { id: imageId } });
   }
 
-  async addVariant(productId: string, data: { size: string; color?: string; colorHex?: string; sku: string; stock: number }) {
+  async addVariant(productId: string, data: { size: string; color?: string; colorHex?: string; imageUrl?: string; imageUrls?: string[]; sku: string; stock: number }) {
     await this.findById(productId);
     const normalizedColor = data.color ?? null;
 
@@ -255,15 +267,27 @@ export class ProductsService {
         data: {
           sku: data.sku,
           stock: data.stock,
-          colorHex: data.colorHex,
+          colorHex: data.colorHex ?? null,
           color: normalizedColor,
+          imageUrl: data.imageUrl ?? null,
+          imageUrls: data.imageUrls ?? [],
           isActive: true,
-        },
+        } as any,
       });
     }
 
     return this.prisma.productVariant.create({
-      data: { productId, ...data, color: normalizedColor },
+      data: {
+        productId,
+        size: data.size,
+        color: normalizedColor,
+        colorHex: data.colorHex ?? null,
+        imageUrl: data.imageUrl ?? null,
+        imageUrls: data.imageUrls ?? [],
+        sku: data.sku,
+        stock: data.stock,
+        isActive: true,
+      } as any,
     });
   }
 

@@ -71,22 +71,32 @@ export default function SalesPage() {
       const { data } = await reportsApi.getSales({ dateFrom });
 
       // Calculate additional metrics
-      const today = new Date().toISOString().split('T')[0];
-      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      const todayDate = new Date();
+      const today = `${todayDate.getFullYear()}-${String(todayDate.getMonth() + 1).padStart(2, '0')}-${String(todayDate.getDate()).padStart(2, '0')}`;
+      
+      const yesterdayDate = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const yesterday = `${yesterdayDate.getFullYear()}-${String(yesterdayDate.getMonth() + 1).padStart(2, '0')}-${String(yesterdayDate.getDate()).padStart(2, '0')}`;
 
       const todayData = data.dailySales?.find((d: DailySale) => d.date === today) || { revenue: 0, orders: 0 };
       const yesterdayData = data.dailySales?.find((d: DailySale) => d.date === yesterday) || { revenue: 0, orders: 0 };
 
-      const weekStart = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-      const monthStart = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      const weekStartDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      const weekStartStr = `${weekStartDate.getFullYear()}-${String(weekStartDate.getMonth() + 1).padStart(2, '0')}-${String(weekStartDate.getDate()).padStart(2, '0')}`;
+      
+      const monthStartDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+      const monthStartStr = `${monthStartDate.getFullYear()}-${String(monthStartDate.getMonth() + 1).padStart(2, '0')}-${String(monthStartDate.getDate()).padStart(2, '0')}`;
 
       interface AccData { revenue: number; orders: number }
 
-      const weekData = data.dailySales?.filter((d: DailySale) => d.date >= weekStart.split('T')[0])
+      const weekData = data.dailySales?.filter((d: DailySale) => d.date >= weekStartStr)
         .reduce((acc: AccData, curr: DailySale) => ({ revenue: acc.revenue + curr.revenue, orders: acc.orders + curr.orders }), { revenue: 0, orders: 0 });
 
-      const monthData = data.dailySales?.filter((d: DailySale) => d.date >= monthStart.split('T')[0])
-        .reduce((acc: AccData, curr: DailySale) => ({ revenue: acc.revenue + curr.revenue, orders: acc.orders + curr.orders }), { revenue: 0, orders: 0 });
+      // Only calculate monthData if period is >= 30 days, else use totalRevenue since it's the period total
+      const isPeriodLessThanMonth = parseInt(period) < 30;
+      const monthData = isPeriodLessThanMonth 
+        ? { revenue: data.totalRevenue, orders: data.totalOrders }
+        : data.dailySales?.filter((d: DailySale) => d.date >= monthStartStr)
+            .reduce((acc: AccData, curr: DailySale) => ({ revenue: acc.revenue + curr.revenue, orders: acc.orders + curr.orders }), { revenue: 0, orders: 0 });
 
       const growthRate = yesterdayData.revenue > 0
         ? ((todayData.revenue - yesterdayData.revenue) / yesterdayData.revenue) * 100
@@ -244,7 +254,7 @@ export default function SalesPage() {
           <div style={{ position: 'absolute', bottom: '-30px', right: '-10px', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative' }}>
             <div>
-              <div style={{ fontSize: '0.85rem', opacity: 0.9, marginBottom: '0.5rem' }}>مبيعات الشهر</div>
+              <div style={{ fontSize: '0.85rem', opacity: 0.9, marginBottom: '0.5rem' }}>{period === '30' ? 'مبيعات الشهر' : period === '7' ? 'مبيعات الفترة' : 'مبيعات آخر 30 يوم'}</div>
               <div style={{ fontSize: '2rem', fontWeight: 700, lineHeight: 1 }}>
                 {stats?.monthRevenue?.toLocaleString() || 0}
                 <span style={{ fontSize: '0.9rem', fontWeight: 500, marginRight: '0.25rem' }}>MAD</span>
@@ -388,8 +398,12 @@ export default function SalesPage() {
                 dataKey="date"
                 tick={{ fontSize: 11 }}
                 tickFormatter={(v) => {
-                  const date = new Date(v);
-                  return `${date.getDate()}/${date.getMonth() + 1}`;
+                  if (!v) return '';
+                  const parts = v.split('-');
+                  if (parts.length === 3) {
+                    return `${parseInt(parts[2], 10)}/${parseInt(parts[1], 10)}`;
+                  }
+                  return v;
                 }}
               />
               <YAxis yAxisId="left" tick={{ fontSize: 11 }} />

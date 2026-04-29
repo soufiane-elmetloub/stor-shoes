@@ -24,6 +24,7 @@ export default function BestSellers({ products }: { products: Product[] }) {
         const hasDiscount = product.salePrice && product.salePrice < product.price;
         const discountPercent = hasDiscount ? Math.round((1 - Number(product.salePrice) / Number(product.price)) * 100) : 0;
         const displayPrice = product.salePrice || product.price;
+        const totalStock = product.variants?.reduce((s, v) => s + v.stock, 0) || 0;
 
         return (
           <Link key={product.id} href={`/products/${product.slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
@@ -47,24 +48,27 @@ export default function BestSellers({ products }: { products: Product[] }) {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     className="object-cover"
                     loading="lazy"
+                    unoptimized
                   />
                 )}
-                {hasDiscount && (
+                {totalStock === 0 ? (
+                  <span className="discount-tag" style={{ background: '#111827' }}>Épuisé</span>
+                ) : hasDiscount ? (
                   <span className="discount-tag">Promotion</span>
-                )}
+                ) : null}
               </div>
 
               {/* Info */}
-              <div className="p-4 sm:p-5 bg-white relative flex flex-col flex-grow">
+              <div className="p-4 sm:p-5 bg-white relative flex flex-col grow">
                 {product.brand && (
-                  <span className="text-[0.6rem] font-[500] sm:text-[0.65rem] sm:font-[600] text-blue-500 uppercase tracking-widest block mb-[0.35rem] whitespace-nowrap overflow-hidden text-ellipsis">{product.brand}</span>
+                  <span className="text-[0.6rem] font-medium sm:text-[0.65rem] sm:font-semibold text-blue-500 uppercase tracking-widest block mb-[0.35rem] whitespace-nowrap overflow-hidden text-ellipsis">{product.brand}</span>
                 )}
-                <h3 className="text-[0.85rem] sm:text-[0.95rem] font-[600] text-slate-900 leading-[1.4] mb-4 sm:mb-3"
+                <h3 className="text-[0.85rem] sm:text-[0.95rem] font-semibold text-slate-900 leading-[1.4] mb-4 sm:mb-3"
                     style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {product.name}
                 </h3>
                 <div className="flex flex-nowrap items-baseline gap-1 sm:gap-2 mt-auto overflow-hidden">
-                  <span className={`text-[0.75rem] sm:text-[1.05rem] font-[800] whitespace-nowrap ${hasDiscount ? 'text-red-500' : 'text-slate-900'}`}>
+                  <span className={`text-[0.75rem] sm:text-[1.05rem] font-extrabold whitespace-nowrap ${hasDiscount ? 'text-red-500' : 'text-slate-900'}`}>
                     {Number(displayPrice).toLocaleString('en-US')}&nbsp;MAD
                   </span>
                   {hasDiscount && (
@@ -136,10 +140,17 @@ export default function BestSellers({ products }: { products: Product[] }) {
           right: 0.75rem;
           background: #ef4444;
           color: white;
-          padding: 0.2rem 0.6rem;
+          padding: 0.3rem 0.75rem;
           border-radius: 9999px;
-          font-size: 0.7rem;
+          font-size: 12px;
           font-weight: 700;
+          z-index: 5;
+        }
+        @media (max-width: 768px) {
+          .discount-tag {
+            font-size: 10px;
+            padding: 0.25rem 0.6rem;
+          }
         }
       `}</style>
     </div>

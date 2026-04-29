@@ -37,12 +37,16 @@ export class InventoryService {
     return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
   }
 
-  async updateStock(variantId: string, stock: number) {
+  async updateVariant(variantId: string, data: any) {
     return this.prisma.productVariant.update({
       where: { id: variantId },
-      data: { stock },
+      data,
       include: { product: { include: { images: { take: 1 } } } },
-    });
+    } as any);
+  }
+
+  async updateStock(variantId: string, stock: number) {
+    return this.updateVariant(variantId, { stock });
   }
 
   async getLowStockCount() {

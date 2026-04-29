@@ -22,8 +22,8 @@ export class InventoryController {
   }
 
   @Patch(':variantId')
-  @ApiOperation({ summary: 'تحديث كمية المخزون' })
-  updateStock(@Param('variantId') variantId: string, @Body() body: { stock: number }) {
-    return this.inventoryService.updateStock(variantId, body.stock);
+  @ApiOperation({ summary: 'تحديث بيانات المتغير' })
+  updateStock(@Param('variantId') variantId: string, @Body() body: any) {
+    return (this.inventoryService as any).updateVariant(variantId, body);
   }
 }
