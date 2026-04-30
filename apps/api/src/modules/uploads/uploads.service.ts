@@ -1,4 +1,9 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary } from 'cloudinary';
 import * as streamifier from 'streamifier';
@@ -10,8 +15,12 @@ export class UploadsService {
   private readonly logger = new Logger(UploadsService.name);
   private readonly uploadDir: string;
   private readonly isCloudinaryConfigured: boolean;
+  private readonly allowLocalFallback: boolean;
 
   constructor(private configService: ConfigService) {
+    const nodeEnv = this.configService.get<string>('NODE_ENV') || 'development';
+    this.allowLocalFallback = nodeEnv !== 'production';
+
     // Configure Cloudinary
     const cloudName = this.configService.get<string>('CLOUDINARY_CLOUD_NAME');
     const apiKey = this.configService.get<string>('CLOUDINARY_API_KEY');
@@ -27,17 +36,23 @@ export class UploadsService {
       this.logger.log('Cloudinary is configured and ready to use.');
     } else {
       this.isCloudinaryConfigured = false;
-      this.logger.warn('Cloudinary configuration is missing. Falling back to local storage.');
+      if (this.allowLocalFallback) {
+        this.logger.warn(
+          'Cloudinary configuration is missing. Falling back to local storage (non-production mode).',
+        );
+      } else {
+        this.logger.error(
+          'Cloudinary configuration is missing in production. Image uploads are disabled until CLOUDINARY_* variables are configured.',
+        );
+      }
     }
 
     // Local fallback directory
     this.uploadDir = this.configService.get<string>('UPLOADS_PATH')
       ? path.resolve(this.configService.get<string>('UPLOADS_PATH')!)
-      : path.join(process.cwd(), 'uploads'); // Simplest and most robust way in production
+      : path.join(process.cwd(), 'uploads');
 
-    this.logger.log(`📂 Uploads directory set to: ${this.uploadDir}`);
-
-    if (!this.isCloudinaryConfigured && !fs.existsSync(this.uploadDir)) {
+    if (this.allowLocalFallback && !this.isCloudinaryConfigured && !fs.existsSync(this.uploadDir)) {
       fs.mkdirSync(this.uploadDir, { recursive: true });
     }
   }
@@ -48,6 +63,11 @@ export class UploadsService {
     }
     if (this.isCloudinaryConfigured) {
       return this.uploadToCloudinary(file);
+    }
+    if (!this.allowLocalFallback) {
+      throw new InternalServerErrorException(
+        'Image storage is not configured. Please configure Cloudinary variables on the server.',
+      );
     }
     return this.uploadToLocal(file);
   }
@@ -67,7 +87,7 @@ export class UploadsService {
             this.logger.error('Failed to upload image to Cloudinary', error);
             return reject(error || new Error('Cloudinary returned no result'));
           }
-          resolve(result!.secure_url);
+          resolve(result.secure_url);
         },
       );
 
