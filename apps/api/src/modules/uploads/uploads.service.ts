@@ -19,7 +19,12 @@ export class UploadsService {
 
   constructor(private configService: ConfigService) {
     const nodeEnv = this.configService.get<string>('NODE_ENV') || 'development';
-    this.allowLocalFallback = nodeEnv !== 'production';
+    const isRailway =
+      !!this.configService.get<string>('RAILWAY_ENVIRONMENT') ||
+      !!this.configService.get<string>('RAILWAY_PROJECT_ID');
+    const localFallbackFlag = this.configService.get<string>('ALLOW_LOCAL_UPLOADS');
+    this.allowLocalFallback =
+      localFallbackFlag === 'true' ? true : !isRailway && nodeEnv !== 'production';
 
     // Configure Cloudinary
     const cloudName = this.configService.get<string>('CLOUDINARY_CLOUD_NAME');
@@ -52,7 +57,11 @@ export class UploadsService {
       ? path.resolve(this.configService.get<string>('UPLOADS_PATH')!)
       : path.join(process.cwd(), 'uploads');
 
-    if (this.allowLocalFallback && !this.isCloudinaryConfigured && !fs.existsSync(this.uploadDir)) {
+    if (
+      this.allowLocalFallback &&
+      !this.isCloudinaryConfigured &&
+      !fs.existsSync(this.uploadDir)
+    ) {
       fs.mkdirSync(this.uploadDir, { recursive: true });
     }
   }
