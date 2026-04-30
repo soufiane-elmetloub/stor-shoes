@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary } from 'cloudinary';
 import * as streamifier from 'streamifier';
@@ -33,7 +33,9 @@ export class UploadsService {
     // Local fallback directory
     this.uploadDir = this.configService.get<string>('UPLOADS_PATH')
       ? path.resolve(this.configService.get<string>('UPLOADS_PATH')!)
-      : path.join(process.cwd(), '..', '..', 'uploads');
+      : path.join(process.cwd(), 'uploads'); // Simplest and most robust way in production
+
+    this.logger.log(`📂 Uploads directory set to: ${this.uploadDir}`);
 
     if (!this.isCloudinaryConfigured && !fs.existsSync(this.uploadDir)) {
       fs.mkdirSync(this.uploadDir, { recursive: true });
@@ -41,6 +43,9 @@ export class UploadsService {
   }
 
   async saveFile(file: Express.Multer.File): Promise<string> {
+    if (!file) {
+      throw new BadRequestException('No file provided');
+    }
     if (this.isCloudinaryConfigured) {
       return this.uploadToCloudinary(file);
     }
@@ -58,11 +63,11 @@ export class UploadsService {
           resource_type: 'auto',
         },
         (error, result) => {
-          if (error) {
+          if (error || !result) {
             this.logger.error('Failed to upload image to Cloudinary', error);
-            return reject(error);
+            return reject(error || new Error('Cloudinary returned no result'));
           }
-          resolve(result.secure_url);
+          resolve(result!.secure_url);
         },
       );
 
@@ -74,8 +79,11 @@ export class UploadsService {
    * Upload to local disk — returns a relative /uploads/... path.
    */
   private async uploadToLocal(file: Express.Multer.File): Promise<string> {
+    if (!fs.existsSync(this.uploadDir)) {
+      fs.mkdirSync(this.uploadDir, { recursive: true });
+    }
     const ext = path.extname(file.originalname);
-    const filename = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}${ext}`;
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 11)}${ext}`;
     const filepath = path.join(this.uploadDir, filename);
     fs.writeFileSync(filepath, file.buffer);
     return `/uploads/${filename}`;
@@ -88,7 +96,10 @@ export class UploadsService {
         const urlParts = fileUrl.split('/');
         const fileWithExt = urlParts[urlParts.length - 1];
         const folder = urlParts[urlParts.length - 2];
-        const publicId = `${folder}/${fileWithExt.split('.')[0]}`;
+        const fileName = fileWithExt.includes('.') 
+          ? fileWithExt.substring(0, fileWithExt.lastIndexOf('.')) 
+          : fileWithExt;
+        const publicId = `${folder}/${fileName}`;
         
         await cloudinary.uploader.destroy(publicId);
         this.logger.log(`Deleted image from Cloudinary: ${publicId}`);

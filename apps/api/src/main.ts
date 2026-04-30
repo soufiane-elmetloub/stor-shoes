@@ -14,8 +14,15 @@ async function bootstrap() {
   // Serve static uploads — absolute path works on any host
   const uploadsPath = process.env.UPLOADS_PATH
     ? path.resolve(process.env.UPLOADS_PATH)
-    : path.join(__dirname, '..', '..', '..', '..', 'uploads');
+    : path.join(process.cwd(), 'uploads'); // Simplest and most robust way in production
 
+  // Create the directory if it doesn't exist yet
+  const fs = require('fs');
+  if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+  }
+
+  console.log(`📂 Serving static files from: ${uploadsPath}`);
   app.useStaticAssets(uploadsPath, { prefix: '/uploads' });
 
   // CORS — allow localhost (dev) + Vercel storefront (prod)
