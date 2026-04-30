@@ -143,8 +143,17 @@ export const uploadsApi = {
   uploadImage: (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
-    return api.post('/uploads/image', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    
+    // Always use the production API for image uploads to ensure Cloudinary is used,
+    // even when the admin panel is running locally.
+    const uploadUrl = 'https://api-production-ba03.up.railway.app/api/uploads/image';
+    
+    return axios.post(uploadUrl, formData, {
+      headers: { 
+        'Content-Type': 'multipart/form-data',
+        // Pass the local token so the request is authenticated on the production API
+        'Authorization': `Bearer ${localStorage.getItem('storshoes_token')}`
+      },
     });
   },
 };
