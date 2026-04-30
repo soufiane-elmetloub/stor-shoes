@@ -445,9 +445,24 @@ export default function ProductDetailPage() {
           {uniqueColors.length > 0 && uniqueColors.some((v: any) => v.color && v.color.trim() !== '') && (
             <div style={{ marginTop: '1rem' }}>
               <label style={{ fontWeight: 600, fontSize: '0.72rem', marginBottom: '0.4rem', display: 'block', color: '#000000', fontFamily: "'Inter', system-ui, sans-serif", textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                Color: <span style={{ fontWeight: 400, textTransform: 'none' }}>{selectedColor}</span>
+                Couleur: <span style={{ fontWeight: 400, textTransform: 'none' }}>{selectedColor || 'Principale'}</span>
               </label>
-              <div style={{ display: 'flex', gap: '0.4rem' }}>
+              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                {variants.some((v: any) => !v.color || v.color.trim() === '') && (
+                  <button onClick={() => setSelectedColor('')}
+                    style={{ width: 44, height: 44, borderRadius: '50%', background: '#f8fafc',
+                      border: selectedColor === '' ? '2px solid #000000' : '1.5px solid #d1d5db',
+                      cursor: 'pointer', outline: 'none', transition: 'all 0.2s ease',
+                      boxShadow: selectedColor === '' ? '0 0 0 3px white, 0 0 0 5px #000000' : 'none',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0
+                    }} title="Principale">
+                    {product.images?.[0] ? (
+                      <Image src={getImageUrl(product.images[0].url)} alt="Principale" width={40} height={40} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} unoptimized />
+                    ) : (
+                      <span style={{ fontSize: '0.6rem', fontWeight: 600 }}>Main</span>
+                    )}
+                  </button>
+                )}
                 {uniqueColors.filter((v: any) => v.color && v.color.trim() !== '').map((v: any) => (
                   <button key={v.color} onClick={() => setSelectedColor(v.color || '')}
                     style={{ width: 44, height: 44, borderRadius: '50%', background: v.colorHex || '#ccc',
