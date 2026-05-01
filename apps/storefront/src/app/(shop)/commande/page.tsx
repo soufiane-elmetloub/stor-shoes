@@ -230,7 +230,7 @@ function CommandeContent() {
           }
           .mobile-submit-btn-wrapper {
             display: flex !important;
-            justify-content: flex-start;
+            justify-content: center;
             width: 100%;
             margin-top: 1rem;
             margin-bottom: 1rem;
@@ -346,7 +346,7 @@ function CommandeContent() {
             <button onClick={handleSubmit} disabled={submitting}
               className="mobile-submit-btn"
               style={{
-                width: '100%', maxWidth: '300px', margin: '0 auto 0 calc(50% - 130px)', padding: '1rem 2rem',
+                width: '100%', maxWidth: '300px', margin: '0 auto', padding: '1rem 2rem',
                 borderRadius: '99px', border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
                 background: submitting ? '#555' : '#000', color: '#fff',
                 fontFamily: INTER, fontWeight: 700, fontSize: '0.9rem',
@@ -379,7 +379,7 @@ function CommandeContent() {
                   </div>
                 )}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                  <p style={{ fontFamily: PLAYFAIR, fontSize: '1rem', fontWeight: 700, color: '#000', margin: 0, lineHeight: 1.3 }}>{productName}</p>
+                  <p style={{ fontFamily: PLAYFAIR, fontSize: '1rem', fontWeight: 700, color: '#000', margin: 0, lineHeight: 1.3, wordBreak: 'break-word', overflowWrap: 'break-word' }}>{productName}</p>
                   {size && (
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '0.72rem', color: '#888', fontFamily: INTER, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Taille</span>
@@ -447,7 +447,7 @@ function CommandeContent() {
 
                       {/* Info & Vertical Layout */}
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                        <p style={{ fontFamily: PLAYFAIR, fontSize: '1rem', fontWeight: 700, color: '#000', margin: 0, lineHeight: 1.3 }}>{item.name}</p>
+                        <p style={{ fontFamily: PLAYFAIR, fontSize: '1rem', fontWeight: 700, color: '#000', margin: 0, lineHeight: 1.3, wordBreak: 'break-word', overflowWrap: 'break-word' }}>{item.name}</p>
                         {item.size && (
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <span style={{ fontSize: '0.72rem', color: '#888', fontFamily: INTER, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Taille</span>

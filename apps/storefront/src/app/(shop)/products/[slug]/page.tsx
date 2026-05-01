@@ -36,8 +36,11 @@ export default function ProductDetailPage() {
           trackProductView(data.id);
         }
         if (data.variants?.length) {
-          setSelectedSize(data.variants[0].size);
-          setSelectedColor(data.variants[0].color || '');
+          const hasMain = data.variants.some((v: any) => !v.color || v.color.trim() === '');
+          const initialColor = hasMain ? '' : (data.variants[0].color || '');
+          setSelectedColor(initialColor);
+          const initialSizes = data.variants.filter((v: any) => initialColor === '' ? (!v.color || v.color.trim() === '') : (v.color === initialColor)).map((v: any) => v.size);
+          setSelectedSize(initialSizes[0] || '');
         }
         if (data.categoryId) {
           fetch(`${API_URL}/products?categoryId=${data.categoryId}&limit=4&isActive=true`)
@@ -181,8 +184,8 @@ export default function ProductDetailPage() {
   );
 
   const uniqueColors = [...new Map(variants.map((v: any) => [v.color, v])).values()] as any[];
-  const uniqueSizes = [...new Set(variants.filter((v: any) => !selectedColor || v.color === selectedColor).map((v: any) => v.size))] as string[];
-  const selectedVariant = variants.find((v: any) => v.size === selectedSize && (!selectedColor || v.color === selectedColor));
+  const uniqueSizes = [...new Set(variants.filter((v: any) => selectedColor === '' ? (!v.color || v.color.trim() === '') : v.color === selectedColor).map((v: any) => v.size))] as string[];
+  const selectedVariant = variants.find((v: any) => v.size === selectedSize && (selectedColor === '' ? (!v.color || v.color.trim() === '') : v.color === selectedColor));
   const hasDiscount = product?.salePrice && product.salePrice < product.price;
   const totalStock = variants.reduce((acc, v) => acc + v.stock, 0);
 
@@ -190,9 +193,10 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (!selectedVariant || !selectedVariant.id) return;
+    const variantImage = activeImages[0]?.url || product.images?.[0]?.url || '';
     addItem({
       productId: product.id, variantId: selectedVariant.id,
-      name: product.name, image: getImageUrl(product.images?.[0]?.url || ''),
+      name: product.name, image: getImageUrl(variantImage),
       size: selectedSize, color: selectedColor,
       price: Number(product.salePrice || product.price), quantity,
       stock: selectedVariant.stock,
@@ -566,11 +570,12 @@ export default function ProductDetailPage() {
               aria-label="Achetez avec paiement à la livraison"
               onClick={() => {
                 if (!selectedVariant || !selectedVariant.id) return;
+                const variantImage = activeImages[0]?.url || product.images?.[0]?.url || '';
                 const params = new URLSearchParams({
                   productId: product.id,
                   variantId: selectedVariant.id,
                   name: product.name,
-                  image: getImageUrl(product.images?.[0]?.url || ''),
+                  image: getImageUrl(variantImage),
                   size: selectedSize,
                   color: selectedColor || '',
                   price: String(Number(product.salePrice || product.price)),

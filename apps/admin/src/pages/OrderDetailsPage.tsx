@@ -189,7 +189,7 @@ export default function OrderDetailsPage() {
         <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>🧾 تفاصيل المنتجات المطلوبة</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {order.items?.map((item: any, index: number) => {
-            const img = item.product?.images?.[0]?.url;
+            const img = item.variant?.imageUrls?.[0] || item.variant?.imageUrl || item.product?.images?.[0]?.url;
             const lineTotal = Number(item.price || 0) * Number(item.quantity || 0);
             return (
               <div

@@ -114,7 +114,7 @@ export default function OrdersPage() {
                 <td>
                   <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
                     {order.items?.slice(0, 3).map((item: any, idx: number) => {
-                      const imgUrl = item.product?.images?.[0]?.url;
+                      const imgUrl = item.variant?.imageUrls?.[0] || item.variant?.imageUrl || item.product?.images?.[0]?.url;
                       return (
                         <div key={idx} style={{ position: 'relative' }} title={`${item.product?.name} (x${item.quantity})`}>
                           {imgUrl ? (
