@@ -10,10 +10,11 @@ export class InventoryService {
     const limit = query.limit || 20;
     const skip = (page - 1) * limit;
 
-    const where: any = { isActive: true };
+    const where: any = { isActive: true, product: { isActive: true } };
     if (query.lowStock) where.stock = { lte: 3 };
     if (query.search) {
       where.product = {
+        ...where.product,
         OR: [
           { name: { contains: query.search, mode: 'insensitive' } },
           { brand: { contains: query.search, mode: 'insensitive' } },
@@ -51,7 +52,7 @@ export class InventoryService {
 
   async getLowStockCount() {
     return this.prisma.productVariant.count({
-      where: { stock: { lte: 3 }, isActive: true },
+      where: { stock: { lte: 3 }, isActive: true, product: { isActive: true } },
     });
   }
 }

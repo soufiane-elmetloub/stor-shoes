@@ -91,8 +91,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         }
         .product-card-price-row {
           gap: 0.25rem !important;
-          flex-wrap: nowrap !important;
-          white-space: nowrap !important;
+          flex-wrap: wrap !important;
         }
         .product-card-price-current {
           font-size: 0.78rem !important;
@@ -184,7 +183,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           }}>
             {product.name}
           </h3>
-          <div role="group" aria-label={`Price: ${Number(displayPrice).toLocaleString('en-US')} Moroccan Dirhams`} className="product-card-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: 'auto', flexWrap: 'nowrap' }}>
+          <div role="group" aria-label={`Price: ${Number(displayPrice).toLocaleString('en-US')} Moroccan Dirhams`} className="product-card-price-row" style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: 'auto', flexWrap: 'wrap' }}>
             <span aria-label={`Current price ${Number(displayPrice).toLocaleString('en-US')} MAD`} className="product-card-price-current" style={{ fontSize: '1.15rem', fontWeight: 800, color: hasDiscount ? '#ef4444' : '#0f172a', whiteSpace: 'nowrap' }}>
               {Number(displayPrice).toLocaleString('en-US')} MAD
             </span>
